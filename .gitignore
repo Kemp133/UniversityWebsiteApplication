@@ -1,7 +1,7 @@
 .idea/
 
 /db.sqlite3
-/UniversityWebsiteApplication/settings.py
 /*/migrations
 /*/__pycache__
 venv
+/UniversityWebsiteApplication/.env
