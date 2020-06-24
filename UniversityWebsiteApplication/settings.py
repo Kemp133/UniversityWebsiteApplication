@@ -10,8 +10,18 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-import environ
 import os
+
+def get_secret_key(debug):
+    if not debug:
+        return os.getenv("SECRET_KEY")
+
+    import environ
+    # Create environment object
+    env = environ.Env()
+    # Read .env file
+    environ.Env.read_env()
+    return env("SECRET_KEY")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,17 +29,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-
-# Create environment object
-env = environ.Env()
-# Read .env file
-environ.Env.read_env()
-
-SECRET_KEY = env("SECRET_KEY")
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = get_secret_key(DEBUG)
 
 ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 
