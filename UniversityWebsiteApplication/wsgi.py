@@ -14,6 +14,6 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'UniversityWebsiteApplication.settings')
 project_folder = os.path.expanduser('~/kemp133.eu.pythonanywhere.com/UniversityWebsiteApplication')  # adjust as appropriate
-load_dotenv(os.path.join(project_folder, '.env'))
+load_dotenv(os.path.join(project_folder, 'UniversityWebsiteApplication/.env'))
 
 application = get_wsgi_application()
