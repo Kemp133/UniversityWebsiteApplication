@@ -6,14 +6,9 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap/bootstrap.min.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
         <link rel="shortcut icon" type="image/png" href="{% static 'UniversityWebsiteFavicon.ico' %}"/>
-        <title>
-            {% if title %}
-                {{ title }}
-            {% else %}
-                University Website Application
-            {% endif %}
-        </title>
+        <title>{% if title %}{{ title }}{% else %}University Website Application{% endif %}</title>
     </head>
 
     <body>
@@ -42,7 +37,7 @@
             </ul>
           </div>
         </nav>
-        <div class="container">
+        <div class="container body-content">
             {% block body %}{% endblock body %}
         </div>
         <!-- Required JS for bootstrap -->

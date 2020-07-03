@@ -1,0 +1,37 @@
+.body-content {
+    padding-top: 2rem;
+}
+
+form table, form table tr {
+    width: 100%;
+}
+
+form table td {
+    padding: 0.5rem 0;
+}
+
+form table th {
+    width: 15%;
+    vertical-align: top;
+    padding-top: 1rem;
+}
+
+form table td {
+    width: 85%;
+}
+
+form input, form textarea {
+    width: 100%;
+}
+
+form textarea {
+    resize: none;
+}
+
+.blog-btn {
+    width: 33%;
+}
+
+#formButtons {
+    padding: 0;
+}

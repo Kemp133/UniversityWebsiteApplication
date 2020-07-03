@@ -1,0 +1,28 @@
+{% extends 'UniversityWebsiteApplication/base.html' %}
+
+{% block body %}
+    <div class="text-center">
+        <h2>New Post</h2>
+        <br />
+        <form method="post" class="post-form">
+            {% csrf_token %}
+            {#{{ form.as_p }}#}
+            <table>
+                <tr>
+                    <th><label for="id_blog_title">Blog Title:</label></th>
+                    <td><input type="text" name="blog_title" maxlength="150" required id="id_blog_title"/></td>
+                </tr>
+                <tr>
+                    <th><label for="id_body">Body:</label></th>
+                    <td><textarea name="body" rows="50" required id="id_body"></textarea></td>
+                </tr>
+            </table>
+
+            <div id="formButtons">
+                <button type="submit" class="blog-btn save btn btn-outline-success">Save Post</button>
+                <button class="blog-btn btn btn-outline-warning">Save Draft</button>
+                <button class="blog-btn btn btn-outline-danger">Delete Draft</button>
+            </div>
+        </form>
+    </div>
+{% endblock body %}
