@@ -1,5 +1,5 @@
 .body-content {
-    padding-top: 2rem;
+    padding: 2rem 0;
 }
 
 form table, form table tr {
@@ -8,16 +8,18 @@ form table, form table tr {
 
 form table td {
     padding: 0.5rem 0;
+    text-align: center;
+    margin: 0;
 }
 
 form table th {
-    width: 15%;
-    vertical-align: top;
-    padding-top: 1rem;
+    width: 20%;
+    vertical-align: center;
 }
 
-form table td {
-    width: 85%;
+#blog_body {
+    padding-top: 1rem;
+    vertical-align: top;
 }
 
 form input, form textarea {
@@ -29,9 +31,39 @@ form textarea {
 }
 
 .blog-btn {
-    width: 33%;
+    flex: 1;
 }
 
 #formButtons {
-    padding: 0;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#hardcode_url_row {
+    text-align: left;
+}
+
+#toolmenu {
+    outline: solid black 1px;
+}
+
+#tagInput {
+}
+
+#tagIconList {
+    min-height: 1.5rem;
+    display: flex;
+    flex-direction: row;
+}
+
+#tagInput, #tagList, #tagIconList {
+    width: 100%;
+}
+
+.tagDiv {
+    background-color: gray;
+    display: flex;
+    flex-direction: row;
+    margin-right: 10px;
 }

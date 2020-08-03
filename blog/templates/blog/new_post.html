@@ -1,28 +1,177 @@
 {% extends 'UniversityWebsiteApplication/base.html' %}
 
 {% block body %}
-    <div class="text-center">
-        <h2>New Post</h2>
-        <br />
-        <form method="post" class="post-form">
-            {% csrf_token %}
-            {#{{ form.as_p }}#}
-            <table>
-                <tr>
-                    <th><label for="id_blog_title">Blog Title:</label></th>
-                    <td><input type="text" name="blog_title" maxlength="150" required id="id_blog_title"/></td>
-                </tr>
-                <tr>
-                    <th><label for="id_body">Body:</label></th>
-                    <td><textarea name="body" rows="50" required id="id_body"></textarea></td>
-                </tr>
-            </table>
-
-            <div id="formButtons">
-                <button type="submit" class="blog-btn save btn btn-outline-success">Save Post</button>
-                <button class="blog-btn btn btn-outline-warning">Save Draft</button>
-                <button class="blog-btn btn btn-outline-danger">Delete Draft</button>
+    <div class="container">
+    <div class="row">
+        <div class="col"></div>
+        <div class="body-content col-8">
+            <div class="text-center">
+                <h2>New Post</h2>
+                <br />
+                <button type="button" data-toggle="modal" data-target="#image_upload_modal">Upload Image</button>
+                <form method="post" class="post-form">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <th><label for="id_blog_title">Blog Title:</label></th>
+                            <td><input type="text" name="blog_title" maxlength="150" required id="id_blog_title"/></td>
+                        </tr>
+                        <tr>
+                            <th>Hardcode URL:</th>
+                            <td id="hardcode_url_row"><p id="hardcode_url"></p></td>
+                        </tr>
+                        <tr>
+                            <th><label for="tagInput">Tags:</label></th>
+                            <td>
+                                <input type="text" id="tagInput"/>
+                                <div id="tagIconList"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th id="blog_body"><label for="id_body">Body:</label></th>
+                            <td><textarea name="body" rows="25" required id="id_body"></textarea></td>
+                        </tr>
+                    </table>
+                    <hr />
+                    <div class="formButtons">
+                        <button type="submit" class="blog-btn btn btn-outline-success">Save Post</button>
+                        <button type="button" class="blog-btn btn btn-outline-warning">Save Draft</button>
+                        <button type="button" class="blog-btn btn btn-outline-danger">Delete Draft</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
+        <div class="col"></div>
+    </div>
+    </div>
+
+    <div class="modal" id="image_upload_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Add Image To Blog</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form enctype="multipart/form-data" id="image_upload_form" method="POST">
+                            <table>
+                                {{ imageUploadForm.as_table }}
+                            </table>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock body %}
+
+{% block scripts %}
+        <script type="application/javascript">
+        MAX_TAG_LENGTH = 32;
+        const tagList = []
+        var curTagIndex = 0;
+
+        function toSnakeCase(input) {
+            return input === null || input === "" || input === undefined ? "" : input.toLowerCase().split(" ").join("_");
+        }
+
+        function generateTagDiv(tagVal) {
+            const baseDiv = document.createElement("div");
+            baseDiv.setAttribute("class", "tagDiv");
+            const tag = document.createElement("p");
+            tag.innerHTML = tagVal;
+            const deleteButton = document.createElement("button");
+            deleteButton.setAttribute("class", "delete-tag-btn");
+            deleteButton.setAttribute("type", "button");
+            deleteButton.innerHTML = "X";
+            baseDiv.append(tag, deleteButton);
+            return baseDiv;
+        }
+
+        function emptyInput(input) {
+            input.val("");
+        }
+
+        $(document).ready(function() {
+            tagList.splice(0, tagList.length);
+
+            $("#id_blog_title").on('input', function(val) {
+                const date = new Date();
+                $("#hardcode_url").text("/blog/posts/" + date.getFullYear() + "/" + date.getMonth() + "/" + toSnakeCase(val.target.value));
+            });
+
+            $('#id_blog_title').trigger("input");
+
+            $("#tagInput").keyup(function(key) {
+                /* keycode  - <<ENTER>> key */
+                if(key.which === 59) {
+                    var rawString = key.target.value;
+                    var tagString = rawString.substring(0, rawString.length - 1);
+
+                    if(tagString.length === 0){
+                        emptyInput($(this))
+                        return
+                    }
+
+                    if(tagString.length > MAX_TAG_LENGTH) {
+                        alert("Tag length too long! Tags should only be 32 characters long");
+                        return;
+                    }
+                    $('#tagIconList').append(generateTagDiv(tagString));
+                    tagList.push(tagString);
+                    emptyInput($(this));
+                }
+            });
+
+            $("#image_upload_form").submit(function(e) {
+                e.preventDefault();
+
+                let caption = $('#id_caption').val();
+                let image =  $('#id_image').prop('files')[0];
+
+                if(image === undefined)
+                    return;
+
+                let formData = new FormData();
+                formData.append('caption', caption);
+                formData.append('image', image);
+
+                const csrftoken = $('[name=csrfmiddlewaretoken]').val();
+
+                function csrfSafeMethod(method) {
+                    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                }
+
+                $.ajaxSetup({
+                    beforeSend: function (xhr, settings) {
+                        if(!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+
+                $.ajax({
+                    url: "{% url 'blog-add-image' %}",
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        console.log(response);
+                        if(response.error) {
+                            $.each(response.errors, function(name, error) {console.log(name, error)})
+                        } else {
+                            filename = response.message['image_name'];
+                            addImageTempTag(id);
+                        }
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+            });
+        });
+    </script>
+{% endblock scripts %}
