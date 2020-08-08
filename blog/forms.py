@@ -15,4 +15,4 @@ class CreatePost(forms.Form):
 class UploadImage(ModelForm):
     class Meta:
         model = BlogImageUpload
-        fields = ['caption', 'image']
+        fields = ['caption', 'alt_text', 'image']

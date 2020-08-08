@@ -35,8 +35,8 @@
                     <hr />
                     <div class="formButtons">
                         <button type="submit" class="blog-btn btn btn-outline-success">Save Post</button>
-                        <button type="button" class="blog-btn btn btn-outline-warning">Save Draft</button>
-                        <button type="button" class="blog-btn btn btn-outline-danger">Delete Draft</button>
+{#                        <button type="button" class="blog-btn btn btn-outline-warning">Save Draft</button>#}
+{#                        <button type="button" class="blog-btn btn btn-outline-danger">Delete Draft</button>#}
                     </div>
                 </form>
             </div>
@@ -74,6 +74,7 @@
         MAX_TAG_LENGTH = 32;
         const tagList = []
         var curTagIndex = 0;
+        let post_body = $('#id_body');
 
         function toSnakeCase(input) {
             return input === null || input === "" || input === undefined ? "" : input.toLowerCase().split(" ").join("_");
@@ -94,6 +95,34 @@
 
         function emptyInput(input) {
             input.val("");
+        }
+
+        function insertTag(val) {
+            const cursorPos = post_body.prop('selectionStart');
+            const v = post_body.val();
+            const textBefore = v.substring(0, cursorPos);
+            const textAfter = v.substring(cursorPos, v.length);
+
+            post_body.val(textBefore + val + textAfter);
+            setCaretToPos(post_body, cursorPos + val.length)
+        }
+
+        function setSelectionRange(input, selectionStart, selectionEnd) {
+            if (input.setSelectionRange) {
+            input.focus();
+            input.setSelectionRange(selectionStart, selectionEnd);
+            }
+            else if (input.createTextRange) {
+            var range = input.createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', selectionEnd);
+            range.moveStart('character', selectionStart);
+            range.select();
+            }
+        }
+
+        function setCaretToPos (input, pos) {
+          setSelectionRange(input, pos, pos);
         }
 
         $(document).ready(function() {
@@ -131,6 +160,7 @@
                 e.preventDefault();
 
                 let caption = $('#id_caption').val();
+                let alt_text = $('#id_alt_text').val();
                 let image =  $('#id_image').prop('files')[0];
 
                 if(image === undefined)
@@ -139,6 +169,7 @@
                 let formData = new FormData();
                 formData.append('caption', caption);
                 formData.append('image', image);
+                formData.append('alt_text', alt_text);
 
                 const csrftoken = $('[name=csrfmiddlewaretoken]').val();
 
@@ -163,8 +194,10 @@
                         if(response.error) {
                             $.each(response.errors, function(name, error) {console.log(name, error)})
                         } else {
-                            filename = response.message['image_name'];
-                            addImageTempTag(id);
+                            let image_tag = response['image_tag'];
+                            if(image_tag !== null) {
+                                insertTag(image_tag);
+                            }
                         }
                     },
                     cache: false,

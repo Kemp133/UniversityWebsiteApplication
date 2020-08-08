@@ -43,10 +43,12 @@ class UploadToPathAndRename(object):
 
 class BlogImageUpload(models.Model):
     caption = models.CharField(max_length=256, blank=True)
+    alt_text = models.CharField(max_length=256, blank=True)
     image = models.ImageField(upload_to=UploadToPathAndRename(os.path.join(MEDIA_ROOT, 'temp/')))
 
     def __str__(self):
         return ("Caption: " + self.caption + "\n"
+                + "Alt_Text: " + self.alt_text + "\n"
                 + "Image Path: " + self.image.path + "\n"
                 + "Image Width:" + str(self.image.width) + "\n"
                 + "Image Height:" + str(self.image.height) + "\n")
