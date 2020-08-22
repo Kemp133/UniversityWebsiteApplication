@@ -52,3 +52,14 @@ class BlogImageUpload(models.Model):
                 + "Image Path: " + self.image.path + "\n"
                 + "Image Width:" + str(self.image.width) + "\n"
                 + "Image Height:" + str(self.image.height) + "\n")
+
+
+class BlogExceptions(models.Model):
+    exc_type = models.CharField(max_length=128, blank=True)
+    value = models.CharField(max_length=128, blank=True)
+    traceback = models.CharField(max_length=128, blank=True)
+    date_excepted = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        print("Type: {}\nValue: {}\nTraceback: {}\nDate Occured: {}".format(self.type, self.value, self.traceback,
+                                                                            self.date_excepted))

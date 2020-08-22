@@ -1,9 +1,11 @@
+import os
+
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
 from .forms import CreatePost, UploadImage
-from .models import *
-
+from .models import BlogImageUpload
+from Util import BlogBodyParser as bbp
 
 # Create your views here.
 def index_view(request):
@@ -28,12 +30,27 @@ def blog_new_view(request):
 
 
 def blog_test(request):
-    form = UploadImage()
-    return render(request, 'blog/test.html', {'title': 'Test', 'form': form})
+    string_to_use = """Start Text
+
+\section{Test Header}
+Middle text 1
+
+\subsection{Test Subheader}
+Middle text 2
+
+\subsubsection{Test SubSubSection}
+Middle Text 3
+
+Middle text 3 2
+
+\img{0b4a3dff96724e2d_NLKy1i2.png}"""
+    print(string_to_use)
+    bbp.parse_body(string_to_use)
+    return render(request, 'blog/test.html', {'title': 'Test'})
 
 
 def create_image_tag(name):
-    return '\\img{' + str(name) + '}'
+    return r'\img{' + str(name) + '}'
 
 
 def blog_upload_image(request):
