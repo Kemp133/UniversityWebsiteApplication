@@ -5,7 +5,7 @@ import re
 from UniversityWebsiteApplication.settings import MEDIA_ROOT
 from blog.models import BlogImageUpload
 from .BlogTagFactory import (BlogTagFactory, TemplateEnum, URLTag, ImageTag,
-							 SectionTag, SubSectionTag, SubSubSectionTag, PTag)
+							 SectionTag, SubSectionTag, SubSubSectionTag, PTag, get_base_tag_class_ref)
 from GenericUtils import tree
 
 __tag_map = {
@@ -52,7 +52,7 @@ def parse_body(body: str):
 		# Append the match position to a list ready to collect the normal text later on in the parser
 		match_positions.append(match.span())
 
-		# Split string using the ',' character as a delimeter, and then remove any empty space from either side of the
+		# Split string using the ',' character as a delimiter, and then remove any empty space from either side of the
 		# values
 		parts = list(map(str.strip, str(val).split(",")))
 
@@ -63,9 +63,9 @@ def parse_body(body: str):
 			# Alert the user that a tag was given that doesn't exist
 			# Currently just ignore it
 			continue
-		else:
-			tag = blog_tag_factory.create_blog_tag(tag_to_create, parts[0])
-			# print(tag)
+
+		tag = blog_tag_factory.create_blog_tag(tag_to_create, parts[0])
+		# print(tag)
 
 		if isinstance(tag, URLTag):
 			tag.set_text(parts[1])
@@ -85,7 +85,6 @@ def parse_body(body: str):
 
 			# Get the first (and only) image from the queryset
 			required_image = image_set[0]
-			print(required_image)
 
 			# Get the new image path for the image
 			new_path = get_new_image_path(image_path)
@@ -95,7 +94,7 @@ def parse_body(body: str):
 			tag.set_data(new_path)
 			tag.set_alt(required_image.alt_text)
 
-			initial_tag_list.append(tag)
+		initial_tag_list.append(tag)
 
 	# Now, the text between the tags needs to be added to tags too, ready for creating the tree
 	complete_tag_list = []
@@ -136,6 +135,9 @@ def parse_body(body: str):
 
 	complete_tag_list.append(initial_tag_list[-1])
 
+	for val in complete_tag_list:
+		print("Parse Body: " + str(val))
+
 	""" Sort these into a tree structure """
 	new_tree = __tag_list_to_tree(complete_tag_list)
 
@@ -151,7 +153,7 @@ def split_string_to_p_tags(to_split: str, factory: BlogTagFactory):
 	p_tags = []
 
 	paragraphs = to_split.split("\n\n")
-	print(paragraphs)
+	#print(paragraphs)
 
 	for paragraph in paragraphs:
 		if not(len(paragraph) > 0) or paragraph.isspace():
@@ -202,11 +204,14 @@ def tree_to_html_string(node: tree.Tree):
 	val: tree.Tree
 	for val in node.get_children():
 		if isinstance(val.data, __nest_sensitive_elements):
-			current_strings.append(tree_to_html_string(val))
-		else:
-			current_strings.append(val.data.convert_to_html())
+			# Set the recursive call of this object's children as it's data, needed to format the HTML correctly
+			val.data.set_data(tree_to_html_string(val))
 
-	return str.join(current_strings)
+		current_strings.append(val.data.convert_to_html())
+
+	return_val = "\n".join(current_strings)
+	# print("return val: " + return_val)
+	return return_val
 
 
 def __tag_list_to_tree(tag_list: list):
@@ -216,7 +221,10 @@ def __tag_list_to_tree(tag_list: list):
 	current_node = root_node
 	# Create a nest index counter ready for use in the iteration, this will be used to gauge where new tree objects
 	# should be added
-	current_nest_index = 0
+	current_nest_index = -1
+
+	prev_node: tree.Tree
+	prev_prev_node: tree.Tree
 
 	for tag in tag_list:
 		# Create a new tree node with the tag as the data
@@ -252,7 +260,6 @@ def __tag_list_to_tree(tag_list: list):
 
 			# Set the current next index to the new one
 			current_nest_index = nest_index
-
 		else:
 			# The tag isn't a section tag, and is therefore not sensitive to nesting, so just add it to the current node
 			current_node.insert_node(new_node)

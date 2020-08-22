@@ -34,12 +34,18 @@ class __BlogTagBase:
 	def convert_to_html(self):
 		raise BlogTagMethodNotImplementedException
 
+	def __str__(self):
+		return f"Data: {self._data}"
+
 
 class SectionTag(__BlogTagBase):
 	def __init__(self, data, title):
 		super().__init__(data)
 		self._data = data
 		self._title = title
+
+	def set_data(self, data):
+		self._data = data
 
 	def get_title(self):
 		return self._title
@@ -49,6 +55,9 @@ class SectionTag(__BlogTagBase):
 
 	def convert_to_html(self):
 		return '<div class="section">\n<h1>{}</h1>\n{}\n</div>'.format(self._title, self._data)
+
+	def __str__(self):
+		return f"{super().__str__()}\nTitle: {self._title}"
 
 
 class SubSectionTag(SectionTag):
@@ -120,6 +129,9 @@ class ImageTag(__BlogTagBase):
 	def convert_to_html(self):
 		return '<img src={} alt={} />'.format(self._data, self._alt)
 
+	def __str__(self):
+		return f"{super().__str__()}\nAlt: {self._alt}"
+
 
 class URLTag(__BlogTagBase):
 	_text = ''
@@ -135,6 +147,9 @@ class URLTag(__BlogTagBase):
 
 	def convert_to_html(self):
 		return '<a href={}>{}</a>'.format(self._data, self._text)
+
+	def __str__(self):
+		return f"{super().__str__()}\nText: {self._text}"
 
 
 class PTag(__BlogTagBase):
