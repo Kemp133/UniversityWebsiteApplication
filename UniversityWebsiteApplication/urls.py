@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from WebApp.views import home_view as hv
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     path('', hv, name='home-index_view'),
     path('blog/', include('blog.urls')),
     path('admin/', admin.site.urls),
+    path('accounts/login/', auth_views.LoginView.as_view()),
 ]
