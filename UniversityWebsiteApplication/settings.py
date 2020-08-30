@@ -12,16 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-def get_secret_key(debug):
-    if not debug:
-        return os.getenv("SECRET_KEY")
-
-    import environ
-    # Create environment object
-    env = environ.Env()
-    # Read .env file
-    environ.Env.read_env()
-    return env("SECRET_KEY")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -33,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = get_secret_key(DEBUG)
+SECRET_KEY = "Th1s!sN0Tth£k3YTh@tY0uAr3L0Ok1nGf0r_7urn84ckn0W!!!"
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.pythonanywhere.com']
 
 # Application definition
 
@@ -133,3 +123,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
