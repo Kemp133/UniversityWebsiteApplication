@@ -1,7 +1,5 @@
-import sys
 import enum
-from .Exceptions import BlogTagMethodNotImplementedException
-from blog.models import BlogExceptions
+from .Exceptions import BlogTagMethodNotImplementedException, report_exception
 
 
 class TemplateEnum(enum.Enum):
@@ -15,18 +13,16 @@ class TemplateEnum(enum.Enum):
 	IMG = 8
 	URL = 9
 	P = 10
+	NONE = 11
 
 
 # region Class Definitions
 class __BlogTagBase:
 	def __init__(self, data):
 		if data is None:
-			self._data = ''
+			self.data = ''
 		else:
-			self._data = data
-
-	def get_data(self):
-		return self._data
+			self.data = data
 
 	def regex_check_format(self):
 		raise BlogTagMethodNotImplementedException
@@ -35,29 +31,26 @@ class __BlogTagBase:
 		raise BlogTagMethodNotImplementedException
 
 	def __str__(self):
-		return f"Data: {self._data}"
+		return f"Type: {self.__class__}, Data: {self.data}"
 
 
 class SectionTag(__BlogTagBase):
 	def __init__(self, data, title):
 		super().__init__(data)
-		self._data = data
-		self._title = title
-
-	def set_data(self, data):
-		self._data = data
+		self.data = data
+		self.title = title
 
 	def get_title(self):
-		return self._title
+		return self.title
 
 	def regex_check_format(self):
 		return 'section|SECTION'
 
 	def convert_to_html(self):
-		return '<div class="section">\n<h1>{}</h1>\n{}\n</div>'.format(self._title, self._data)
+		return f'<div class="section">\n\t<h1>{self.title}</h1>\n{self.data}\n</div>'
 
 	def __str__(self):
-		return f"{super().__str__()}\nTitle: {self._title}"
+		return f"{super().__str__()}\nTitle: {self.title}"
 
 
 class SubSectionTag(SectionTag):
@@ -66,7 +59,7 @@ class SubSectionTag(SectionTag):
 		return 'subsection|SUBSECTION'
 
 	def convert_to_html(self):
-		return '<div class="subsection">\n<h3>{}</h3>\n{}\n</div>'.format(self._title, self._data)
+		return f'<div class="subsection">\n\t\t<h3>{self.title}</h3>\n{self.data}\n\t</div>'
 
 
 class SubSubSectionTag(SectionTag):
@@ -75,7 +68,7 @@ class SubSubSectionTag(SectionTag):
 		return 'subsubsection|SUBSUBSECTION'
 
 	def convert_to_html(self):
-		return '<div class="subsubsection">\n<h5>{}</h5>\n{}\n</div>'.format(self._title, self._data)
+		return f'<div class="subsubsection">\n\t\t\t<h5>{self.title}</h5>\n{self.data}\n\t\t</div>'
 
 
 class BoldTag(__BlogTagBase):
@@ -84,7 +77,7 @@ class BoldTag(__BlogTagBase):
 		return '[bB]'
 
 	def convert_to_html(self):
-		return '<strong>{}</strong>'.format(self._data)
+		return f'<strong>{self.data}</strong>'
 
 
 class ItalicTag(__BlogTagBase):
@@ -93,7 +86,7 @@ class ItalicTag(__BlogTagBase):
 		return '[iI]'
 
 	def convert_to_html(self):
-		return '<emp>{}</emp>'.format(self._data)
+		return f'<emp>{self.data}</emp>'
 
 
 class UnderlineTag(__BlogTagBase):
@@ -102,7 +95,7 @@ class UnderlineTag(__BlogTagBase):
 		return '[uU]'
 
 	def convert_to_html(self):
-		return '<ins>{}</ins>'.format(self._data)
+		return f'<ins>{self.data}</ins>'
 
 
 class StruckThroughTag(__BlogTagBase):
@@ -111,53 +104,54 @@ class StruckThroughTag(__BlogTagBase):
 		return 'st|ST'
 
 	def convert_to_html(self):
-		return '<del>{}</del>'.format(self._data)
+		return f'<del>{self.data}</del>'
 
 
 class ImageTag(__BlogTagBase):
-	_alt = ''
-
-	def set_data(self, data):
-		self._data = data
-
-	def set_alt(self, alt):
-		self._alt = alt
+	alt = ''
 
 	def regex_check_format(self):
 		return 'img|IMG'
 
 	def convert_to_html(self):
-		return '<img src={} alt={} />'.format(self._data, self._alt)
+		return f'<img src="{self.data}" alt="{self.alt}"/>'
 
 	def __str__(self):
-		return f"{super().__str__()}\nAlt: {self._alt}"
+		return f"{super().__str__()}\nAlt: {self.alt}"
 
 
 class URLTag(__BlogTagBase):
-	_text = ''
-
-	def set_text(self, text):
-		self._text = text
-
-	def get_text(self):
-		return self._text
+	text = ''
 
 	def regex_check_format(self):
 		return 'url|URL'
 
 	def convert_to_html(self):
-		return '<a href={}>{}</a>'.format(self._data, self._text)
+		return f'<a href="{self.data}">{self.text}</a>'
 
 	def __str__(self):
-		return f"{super().__str__()}\nText: {self._text}"
+		return f"{super().__str__()}\nText: {self.text}"
 
 
 class PTag(__BlogTagBase):
+
 	def regex_check_format(self):
+		# The user should not be able to create an instance of this tag, so return anm empty string
 		return ''
 
 	def convert_to_html(self):
-		return '<p>{}</p>'.format(self._data)
+		return f'<p>{self.data}</p>'
+
+
+class NoneTag(__BlogTagBase):
+	def regex_check_format(self):
+		# We don't need to check for this tag, it is purely to contain raw text data
+		return ''
+
+	def convert_to_html(self):
+		# There is no specific tag to convert the data into, as this is just a container of data, so just return the
+		# data this tag holds
+		return self.data
 # endregion
 
 
@@ -210,6 +204,11 @@ def _url_tag_generator(data):
 def _p_tag_generator(data):
 	tag = PTag(data)
 	return tag
+
+
+def _none_tag_generator(data):
+	tag = NoneTag(data)
+	return tag
 # endregion
 
 
@@ -224,7 +223,8 @@ class BlogTagFactory:
 		StruckThroughTag,
 		ImageTag,
 		URLTag,
-		PTag
+		PTag,
+		NoneTag
 	}
 
 	def __init__(self):
@@ -233,14 +233,9 @@ class BlogTagFactory:
 	def create_blog_tag(self, tag: TemplateEnum, data):
 		try:
 			function = self.function_dict.get(tag)
-		except KeyError as ke:
+		except KeyError:
 			# Add error to database to allow for easier debugging of errors
-			exc_type, value, traceback = sys.exc_info()
-			new_exception = BlogExceptions()
-			new_exception.exc_type = exc_type
-			new_exception.value = value
-			new_exception.traceback = traceback
-			new_exception.save()
+			report_exception()
 		else:
 			return function(str(data))
 
@@ -254,7 +249,8 @@ class BlogTagFactory:
 		TemplateEnum.ST: _struckthrough_tag_generator,
 		TemplateEnum.IMG: _image_tag_generator,
 		TemplateEnum.URL: _url_tag_generator,
-		TemplateEnum.P: _p_tag_generator
+		TemplateEnum.P: _p_tag_generator,
+		TemplateEnum.NONE: _none_tag_generator
 	}
 
 	def get_regex_str(self):

@@ -8,23 +8,28 @@ from UniversityWebsiteApplication.settings import MEDIA_ROOT
 from django.utils.deconstruct import deconstructible
 
 
-class Blog(models.Model):
+class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=128)
     raw_body_location = models.CharField(max_length=128)
     html_fragment_location = models.CharField(max_length=128)
-    date_finished = models.DateTimeField()
-    date_to_publish = models.DateTimeField(null=True)
+    date_finished = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
+
+
+class BlogPostImages(models.Model):
+    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
+    image_path = models.CharField(max_length=128)
+
+
+class BlogImageToMove(models.Model):
+    post_id = models.ForeignKey(Post, on_delete=models.CASCADE)
+    temp_path = models.CharField(max_length=128)
+    new_path = models.CharField(max_length=128)
 
 
 class Tags(models.Model):
     tag = models.CharField(max_length=32)
-
-
-class BlogTags(models.Model):
-    blog_ID = models.ForeignKey(Blog, on_delete=models.CASCADE)
-    tag_ID = models.ForeignKey(Tags, on_delete=models.DO_NOTHING)
 
 
 @deconstructible
@@ -55,11 +60,11 @@ class BlogImageUpload(models.Model):
 
 
 class BlogExceptions(models.Model):
-    exc_type = models.CharField(max_length=128, blank=True)
-    value = models.CharField(max_length=128, blank=True)
-    traceback = models.CharField(max_length=128, blank=True)
+    exc_type = models.CharField(max_length=512, blank=True)
+    value = models.CharField(max_length=512, blank=True)
+    traceback = models.CharField(max_length=512, blank=True)
     date_excepted = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        print("Type: {}\nValue: {}\nTraceback: {}\nDate Occured: {}".format(self.type, self.value, self.traceback,
-                                                                            self.date_excepted))
+        print(f"Type: {self.exc_type}\nValue: {self.value}\nTraceback: {self.traceback}\nDate Occured: "
+              f"{self.date_excepted}")
