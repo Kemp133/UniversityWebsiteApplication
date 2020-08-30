@@ -1,5 +1,21 @@
 {% extends 'UniversityWebsiteApplication/base.html' %}
 
 {% block body %}
-<h1>This is a blog!</h1>
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        {% for post in posts %}
+            <div class="card">
+                <h1><a href="{% url 'blog-post_details' pk=post.pk %}">{{ post.title }}</a></h1>
+                <br>
+                <h4>{{ post.synopsis }}</h4>
+                <br>
+                <a href="{% url 'blog-post_details' pk=post.pk %}">Read More</a>
+            </div>
+        {% endfor %}
+    </div>
+<div class="col-2"></div>
+</div>
 {% endblock body %}
+
+{% block scripts %}{% endblock scripts %}

@@ -1,7 +1,9 @@
 import os
+from uuid import uuid4
 
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from .forms import CreatePost, UploadImage
 from .models import BlogImageUpload, Post, BlogImageToMove, BlogPostImages
@@ -13,9 +15,29 @@ from GenericUtils import media_utils
 
 # Create your views here.
 def index_view(request):
-	return render(request, 'blog/index.html', {'title': 'Blog'})
+	posts = Post.objects.filter(active=True)
+	return render(request, 'blog/index.html', {'title': 'Blog', 'posts': posts})
 
 
+def blog_post_details(request, pk):
+	post = get_object_or_404(Post, pk=pk)
+
+	body = _get_blog_body(post)
+
+	return render(request, "blog/post_details.html", {'post': post, 'post_body': body})
+
+
+def _get_blog_body(post: Post):
+	try:
+		with open(post.html_fragment_location, "r") as fis:
+			body = fis.read()
+	except OSError:
+		report_exception()
+	else:
+		return body
+
+
+@login_required
 def blog_new_view(request):
 	if request.method == "POST":
 		form = CreatePost(request.POST)
@@ -46,7 +68,8 @@ def blog_new_view(request):
 	else:
 		form = CreatePost()
 		image_upload_form = UploadImage()
-		return render(request, 'blog/new_post.html', {'title': 'New Post', 'form': form, 'imageUploadForm': image_upload_form})
+		return render(request, 'blog/new_post.html',
+					  {'title': 'New Post', 'form': form, 'imageUploadForm': image_upload_form})
 
 
 def blog_test(request):
@@ -102,7 +125,7 @@ def move_images_to_media_root(blog_post: Post):
 		temp_path, new_path = image.temp_path, image.new_path
 
 		# Call the method, capturing the return value of the method
-		success = move_image_to_media_root(temp_path, new_path)
+		success = _move_image_to_media_root(temp_path, new_path)
 
 		# If the method is successful in moving the image, then delete the entry in the database
 		if success:
@@ -139,7 +162,7 @@ def _write_file(path_to_write: str, data_to_write: str):
 		return True
 
 
-def move_image_to_media_root(old_path: str, new_path: str):
+def _move_image_to_media_root(old_path: str, new_path: str):
 	# Get the directory structure to create ready to try and create it
 	new_image_directory = "/".join(new_path.split("/")[:-1])
 
@@ -158,6 +181,7 @@ def move_image_to_media_root(old_path: str, new_path: str):
 	return True
 
 
+@login_required
 def blog_upload_image(request):
 	# Check request is AJAX call, and that method is POST
 	if request.is_ajax() and request.method == 'POST':

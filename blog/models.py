@@ -11,6 +11,7 @@ from django.utils.deconstruct import deconstructible
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=128)
+    synopsis = models.CharField(max_length=200, blank=True)
     raw_body_location = models.CharField(max_length=128)
     html_fragment_location = models.CharField(max_length=128)
     date_finished = models.DateTimeField(auto_now=True)
