@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     # Custom Apps
     'WebApp.apps.WebappConfig',
     'blog.apps.BlogConfig',
+    'account.apps.AccountConfig',
+    'cv.apps.CvConfig'
 ]
 
 MIDDLEWARE = [
@@ -126,3 +128,6 @@ STATICFILES_DIRS = []
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = 'home-index_view'

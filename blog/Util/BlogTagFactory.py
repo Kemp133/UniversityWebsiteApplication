@@ -47,7 +47,7 @@ class SectionTag(__BlogTagBase):
 		return 'section|SECTION'
 
 	def convert_to_html(self):
-		return f'<div class="section">\n\t<h1>{self.title}</h1>\n{self.data}\n</div>'
+		return f'<div class="section">\n\t<h2>{self.title}</h2>\n{self.data}\n</div>'
 
 	def __str__(self):
 		return f"{super().__str__()}\nTitle: {self.title}"
@@ -68,7 +68,7 @@ class SubSubSectionTag(SectionTag):
 		return 'subsubsection|SUBSUBSECTION'
 
 	def convert_to_html(self):
-		return f'<div class="subsubsection">\n\t\t\t<h5>{self.title}</h5>\n{self.data}\n\t\t</div>'
+		return f'<div class="subsubsection">\n\t\t\t<h4>{self.title}</h4>\n{self.data}\n\t\t</div>'
 
 
 class BoldTag(__BlogTagBase):

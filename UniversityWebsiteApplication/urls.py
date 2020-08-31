@@ -15,13 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from WebApp.views import home_view as hv
-from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
     path('', hv, name='home-index_view'),
     path('blog/', include('blog.urls')),
+    path('cv/', include('cv.urls')),
     path('admin/', admin.site.urls),
-    path('accounts/login/', auth_views.LoginView.as_view()),
-]
+    path('account/', include('account.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

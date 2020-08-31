@@ -1,3 +1,7 @@
+.website_content {
+    padding: 5px;
+}
+
 .body-content {
     padding: 2rem 0;
 }
@@ -48,9 +52,6 @@ form textarea {
     outline: solid black 1px;
 }
 
-#tagInput {
-}
-
 #tagIconList {
     min-height: 1.5rem;
     display: flex;
@@ -66,4 +67,8 @@ form textarea {
     display: flex;
     flex-direction: row;
     margin-right: 10px;
+}
+
+.btn-outline-success {
+    width: 100%;
 }
