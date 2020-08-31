@@ -1,9 +1,16 @@
 {% extends 'UniversityWebsiteApplication/base.html' %}
 
 {% block body %}
+    <div class="view_title">
+        <h1>Blog Posts</h1>
+    </div>
+    <hr/>
 <div class="row">
-    <div class="col-2"></div>
-    <div class="col-8">
+    <div class="col-4"></div>
+    <div class="col-4">
+        {% if posts|length == 0 %}
+            <h3>No posts to show, that's a bit weird innit...</h3>
+        {% else %}
         {% for post in posts %}
             <div class="card">
                 <h1><a href="{% url 'blog-post_details' pk=post.pk %}">{{ post.title }}</a></h1>
@@ -13,8 +20,15 @@
                 <a href="{% url 'blog-post_details' pk=post.pk %}">Read More</a>
             </div>
         {% endfor %}
+    {% endif %}
     </div>
-<div class="col-2"></div>
+<div class="col-4">
+    {% if user.is_authenticated %}
+        <div id="blog_sidebar">
+            <a href="posts/new"><button class="btn btn-outline-success">Add New Blog Post</button></a>
+        </div>
+    {% endif %}
+</div>
 </div>
 {% endblock body %}
 

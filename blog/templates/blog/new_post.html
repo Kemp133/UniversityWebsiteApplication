@@ -21,11 +21,8 @@
                             <td id="hardcode_url_row"><p id="hardcode_url"></p></td>
                         </tr>
                         <tr>
-                            <th><label for="tagInput">Tags:</label></th>
-                            <td>
-                                <input type="text" id="tagInput"/>
-                                <div id="tagIconList"></div>
-                            </td>
+                            <th><label for="id_synopsis">Synopsis:</label></th>
+                            <td><textarea name="synopsis" rows="3" maxlength="256" required id="id_synopsis"></textarea></td>
                         </tr>
                         <tr>
                             <th id="blog_body"><label for="id_body">Body:</label></th>
@@ -35,8 +32,6 @@
                     <hr />
                     <div class="formButtons">
                         <button type="submit" class="blog-btn btn btn-outline-success">Save Post</button>
-{#                        <button type="button" class="blog-btn btn btn-outline-warning">Save Draft</button>#}
-{#                        <button type="button" class="blog-btn btn btn-outline-danger">Delete Draft</button>#}
                     </div>
                 </form>
             </div>

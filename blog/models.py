@@ -11,7 +11,7 @@ from django.utils.deconstruct import deconstructible
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=128)
-    synopsis = models.CharField(max_length=200, blank=True)
+    synopsis = models.CharField(max_length=256, blank=True)
     raw_body_location = models.CharField(max_length=128)
     html_fragment_location = models.CharField(max_length=128)
     date_finished = models.DateTimeField(auto_now=True)
@@ -67,5 +67,5 @@ class BlogExceptions(models.Model):
     date_excepted = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        print(f"Type: {self.exc_type}\nValue: {self.value}\nTraceback: {self.traceback}\nDate Occured: "
-              f"{self.date_excepted}")
+        return f"Type: {self.exc_type}\nValue: {self.value}\nTraceback: {self.traceback}\nDate Occured: "\
+              f"{self.date_excepted}"

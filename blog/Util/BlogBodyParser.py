@@ -229,13 +229,17 @@ def __deal_with_image(tag_data: str, post: Post):
 	# Get the new image path for the image
 	new_path = media_utils.get_new_path_in_media_root(image_path)
 
+	# Create the database object to hold the old and new path ready to move it once the parsing of the body has finished
 	image_to_upload = BlogImageToMove()
 	image_to_upload.temp_path = image_path
 	image_to_upload.new_path = new_path
 	image_to_upload.post_id = post
 	image_to_upload.save()
 
-	return new_path, required_image.alt_text
+	# The image tag itself doesn't need the absolute path to the image, instead give the url from media
+	image_path_to_return = "/" + "/".join(new_path.split("/")[-5:])
+
+	return image_path_to_return, required_image.alt_text
 # endregion
 
 
@@ -258,7 +262,6 @@ def __tree_to_html_string(node: Tree, tab_index: int):
 		current_strings.append(child.data.convert_to_html())
 
 	return_val = ("\n" + "\t" * tab_index).join(current_strings)
-	print(return_val)
 	if tab_index > 0:
 		return ("\t" * tab_index) + return_val
 

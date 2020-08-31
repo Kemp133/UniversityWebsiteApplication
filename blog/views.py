@@ -46,9 +46,10 @@ def blog_new_view(request):
 			data = request.POST.copy()
 			blog_title = data.get('blog_title')
 			blog_body = data.get('body')
+			blog_synopsis = data.get('synopsis')
 
 			# Create a blog instance, and save it to get an ID for the current blog
-			post = Post(title=blog_title, active=True)
+			post = Post(title=blog_title, synopsis=blog_synopsis, active=True)
 			post.save()
 
 			parsed_body = bbp.parse_body("\r\n", blog_body, post)
@@ -73,43 +74,7 @@ def blog_new_view(request):
 
 
 def blog_test(request):
-	string_to_use = \
-		r"""\section{Hope}
-This is the first true test of my programming prowess, as I think I've just added all the required code to finally have it create the blog post correctly and then store all of the required files in the correct places, I guess we'll find out if it works or not
-
-While I'm at it, let's try and test the parser a little bit too. While I'm not going to go out of my way to break it \b{(as even though I've tried to program it as anybody would be using it, I'm the only one who's going to be realistically using this in the near future, and anyways, I can always make it much better after the submission and marking)}, I will try and test how good the parser is working
-
-\subsection{Testing the subsection functionality}
-This next section is a subsection, and while only the CSS styling will visually show this, I just want to test that the HTML code generated is correct and giving the correct formatting.
-
-\subsubsection{Testing the other tags I've implemented (so far)}
-The current date is the 24/08/2020, so below will be some examples of the tags I've managed to implement up to now. Who knows, maybe this blog won't last very long anyways, but at least I can show what I've managed to achieve for the submission. Thinking about what I'm about to do, I can already think of a problem with the parser, so I'll go and check this problem before I "save" the post, as it might not be a problem after all but it's best to be sure of this:
-
-\b{Bold Text}
-
-\i{Italic Text}
-
-\u{Underlined Text}
-
-\st{Struck Through Text}
-
-\img{eafcfc9c09c94651_dRn0b2l.png}
-
-\url{https://www.google.com, this is a test of the URL tag, it will take the user to google}
-
-\subsection{Testing going back up a section}
-While writing the URL test, I also realised I haven't tested the URL tag yet, so I will check the code for that too before I save the post as well.
-
-\section{Final Thoughts}
-If it makes it to here, I guess it's working (or at least a little bit). Hopefully everything formats correctly, though that can always be sorted out with some CSS and optimisation of the parser, so that's nothing to worry about.
-
-I've spent an absolutely stupendous amount of time on this, and frankly if it doesn't work I'm going to be quite annoyed honestly. Hopefully the effort I've put into this system will shine through and will blind the person assessing my website with how amazing it is \i{(or at least I can hope lol)}.
-
-Once again, writing this final section, I've realised I may have another problem, so I guess I'll add that to the list of things to check before I submit this."""
-	# test = bbp.parse_body(string_to_use, debug=True)
-	test = bbp.parse_body(string_to_use)
-	print(test)
-	return render(request, 'blog/test.html', {'title': 'Test', 'body': test})
+	return render(request, 'blog/test.html', {'title': 'Test'})
 
 
 def create_image_tag(name):
