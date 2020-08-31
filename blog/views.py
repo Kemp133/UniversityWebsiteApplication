@@ -81,6 +81,12 @@ def create_image_tag(name):
 	return r'\img{' + str(name) + '}'
 
 
+@login_required
+def blog_manage_posts(request):
+	all_posts = Post.objects.all()
+	return render(request, 'blog/manage_posts.html', {'title': "Manage posts", 'posts': all_posts})
+
+
 def move_images_to_media_root(blog_post: Post):
 	# Get a list of all the objects with the current post's ID
 	images_to_move = BlogImageToMove.objects.filter(post_id=blog_post.id)

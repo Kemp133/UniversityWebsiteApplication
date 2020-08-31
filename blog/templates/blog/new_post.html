@@ -1,4 +1,4 @@
-{% extends 'UniversityWebsiteApplication/base.html' %}
+{% extends 'blog/blog_base.html' %}
 
 {% block body %}
     <div class="container">
@@ -7,18 +7,19 @@
         <div class="body-content col-8">
             <div class="text-center">
                 <h2>New Post</h2>
-                <br />
-                <button type="button" data-toggle="modal" data-target="#image_upload_modal">Upload Image</button>
-                <form method="post" class="post-form">
+                <hr/>
+                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#image_upload_modal">Upload Image</button>
+                <hr/>
+                <form id="add_post_form" method="post" class="post-form">
                     {% csrf_token %}
                     <table>
                         <tr>
-                            <th><label for="id_blog_title">Blog Title:</label></th>
-                            <td><input type="text" name="blog_title" maxlength="150" required id="id_blog_title"/></td>
-                        </tr>
-                        <tr>
                             <th>Hardcode URL:</th>
                             <td id="hardcode_url_row"><p id="hardcode_url"></p></td>
+                        </tr>
+                        <tr>
+                            <th><label for="id_blog_title">Blog Title:</label></th>
+                            <td><input type="text" name="blog_title" maxlength="150" required id="id_blog_title"/></td>
                         </tr>
                         <tr>
                             <th><label for="id_synopsis">Synopsis:</label></th>

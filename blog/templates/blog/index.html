@@ -1,31 +1,38 @@
-{% extends 'UniversityWebsiteApplication/base.html' %}
+{% extends 'blog/blog_base.html' %}
 
 {% block body %}
-    <div class="view_title">
-        <h1>Blog Posts</h1>
+    <div class="row">
+        <div class="col">
+            <h1>Blog Posts</h1>
+        </div>
     </div>
     <hr/>
 <div class="row">
-    <div class="col-4"></div>
-    <div class="col-4">
+    <div class="col-2"></div>
+    <div id="blog_main_section" class="col-7">
         {% if posts|length == 0 %}
-            <h3>No posts to show, that's a bit weird innit...</h3>
+            <h3>No posts to show, sorry!</h3>
         {% else %}
         {% for post in posts %}
             <div class="card">
                 <h1><a href="{% url 'blog-post_details' pk=post.pk %}">{{ post.title }}</a></h1>
-                <br>
-                <h4>{{ post.synopsis }}</h4>
+                <hr/>
+                <h4>{% if post.synopsis|length == 0 %}{{ post.synopsis }}{% else %}No synopsis given{% endif %}</h4>
                 <br>
                 <a href="{% url 'blog-post_details' pk=post.pk %}">Read More</a>
             </div>
         {% endfor %}
     {% endif %}
     </div>
-<div class="col-4">
+<div class="col-3">
     {% if user.is_authenticated %}
         <div id="blog_sidebar">
+            <h3>Blog Post Actions</h3>
+            <hr/>
             <a href="posts/new"><button class="btn btn-outline-success">Add New Blog Post</button></a>
+            <hr/>
+            <a href="posts/manage"><button class="btn btn-outline-warning">Manage Posts</button></a>
+            <hr/>
         </div>
     {% endif %}
 </div>
