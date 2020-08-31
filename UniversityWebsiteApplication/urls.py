@@ -21,7 +21,7 @@ from WebApp.views import home_view as hv
 
 
 urlpatterns = [
-    path('', hv, name='home-index_view'),
+    path('', hv, name='home-index'),
     path('blog/', include('blog.urls')),
     path('cv/', include('cv.urls')),
     path('admin/', admin.site.urls),

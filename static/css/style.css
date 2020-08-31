@@ -21,11 +21,6 @@ form table th {
     vertical-align: center;
 }
 
-#blog_body {
-    padding-top: 1rem;
-    vertical-align: top;
-}
-
 form input, form textarea {
     width: 100%;
 }
@@ -34,41 +29,12 @@ form textarea {
     resize: none;
 }
 
-.blog-btn {
-    flex: 1;
-}
-
 #formButtons {
     display: flex;
     flex-direction: row;
     width: 100%;
 }
 
-#hardcode_url_row {
-    text-align: left;
-}
-
-#toolmenu {
-    outline: solid black 1px;
-}
-
-#tagIconList {
-    min-height: 1.5rem;
-    display: flex;
-    flex-direction: row;
-}
-
-#tagInput, #tagList, #tagIconList {
-    width: 100%;
-}
-
-.tagDiv {
-    background-color: gray;
-    display: flex;
-    flex-direction: row;
-    margin-right: 10px;
-}
-
-.btn-outline-success {
+.btn {
     width: 100%;
 }

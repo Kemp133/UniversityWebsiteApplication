@@ -7,13 +7,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap/bootstrap.min.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+        {% block stylesheet %}{% endblock %}
         <link rel="shortcut icon" type="image/png" href="{% static 'UniversityWebsiteFavicon.ico' %}"/>
         <title>{% if title %}{{ title }}{% else %}University Website Application{% endif %}</title>
     </head>
 
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <!-- <span class="navbar-brand" href="#">Johnathon Kemp</span> -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -23,14 +23,17 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
               {% with url_name=request.resolver_match.url_name %}
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home-index_view' %}">Home{% if url_name == '' %}<span class="sr-only">(current)</span>{% endif %}</a>
+                <li class="nav-item {% if url_name == 'home-index' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'home-index' %}">Home{% if url_name == 'home-index' %}<span class="sr-only">(current)</span>{% endif %}</a>
               </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'blog-index_view' %}">Blog{% if url_name == 'blog' %}<span class="sr-only">(current)</span>{% endif %}</a>
+                <li class="nav-item {% if url_name == 'blog-index_view' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'blog-index_view' %}">Blog{% if url_name == 'blog-index_view' %}<span class="sr-only">(current)</span>{% endif %}</a>
+                </li>
+                <li class="nav-item {% if url_name == 'cv-index' %}active{% endif %}">
+                    <a class="nav-link" href="{% url 'cv-index' %}">CV{% if url_name == 'cv-index' %}<span class="sr-only">(current)</span>{% endif %}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'cv-index' %}">CV{% if url_name == 'cv' %}<span class="sr-only">(current)</span>{% endif %}</a>
+                    {% if user.is_authenticated %}<a class="nav-link" href="/account/logout">Log Out</a>{% else %}<a class="nav-link" href="/account/login">Log In</a>{% endif %}
                 </li>
             </ul>
               {% endwith %}

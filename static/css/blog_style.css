@@ -1,0 +1,16 @@
+#blog_body {
+    padding-top: 1rem;
+    vertical-align: top;
+}
+
+#hardcode_url_row {
+    text-align: left;
+}
+
+.blog-btn {
+    flex: 1;
+}
+
+#blog_sidebar {
+    padding: 0 10px;
+}
