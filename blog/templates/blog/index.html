@@ -17,7 +17,7 @@
             <div class="card">
                 <h1><a href="{% url 'blog-post_details' pk=post.pk %}">{{ post.title }}</a></h1>
                 <hr/>
-                <h4>{% if post.synopsis|length == 0 %}{{ post.synopsis }}{% else %}No synopsis given{% endif %}</h4>
+                <h4>{% if post.synopsis|length != 0 %}{{ post.synopsis }}{% else %}No synopsis given{% endif %}</h4>
                 <br>
                 <a href="{% url 'blog-post_details' pk=post.pk %}">Read More</a>
             </div>

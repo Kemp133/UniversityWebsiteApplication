@@ -14,20 +14,16 @@
                     {% csrf_token %}
                     <table>
                         <tr>
-                            <th>Hardcode URL:</th>
-                            <td id="hardcode_url_row"><p id="hardcode_url"></p></td>
-                        </tr>
-                        <tr>
                             <th><label for="id_blog_title">Blog Title:</label></th>
-                            <td><input type="text" name="blog_title" maxlength="150" required id="id_blog_title"/></td>
+                            <td><input type="text" name="blog_title" maxlength="150" required id="id_blog_title" autocomplete="off"/></td>
                         </tr>
                         <tr>
                             <th><label for="id_synopsis">Synopsis:</label></th>
-                            <td><textarea name="synopsis" rows="3" maxlength="256" required id="id_synopsis"></textarea></td>
+                            <td><textarea name="synopsis" rows="3" maxlength="256" required id="id_synopsis" autocomplete="off"></textarea></td>
                         </tr>
                         <tr>
                             <th id="blog_body"><label for="id_body">Body:</label></th>
-                            <td><textarea name="body" rows="25" required id="id_body"></textarea></td>
+                            <td><textarea name="body" rows="25" required id="id_body" autocomplete="off"></textarea></td>
                         </tr>
                     </table>
                     <hr />
@@ -67,27 +63,8 @@
 
 {% block scripts %}
         <script type="application/javascript">
-        MAX_TAG_LENGTH = 32;
-        const tagList = []
-        var curTagIndex = 0;
         let post_body = $('#id_body');
-
-        function toSnakeCase(input) {
-            return input === null || input === "" || input === undefined ? "" : input.toLowerCase().split(" ").join("_");
-        }
-
-        function generateTagDiv(tagVal) {
-            const baseDiv = document.createElement("div");
-            baseDiv.setAttribute("class", "tagDiv");
-            const tag = document.createElement("p");
-            tag.innerHTML = tagVal;
-            const deleteButton = document.createElement("button");
-            deleteButton.setAttribute("class", "delete-tag-btn");
-            deleteButton.setAttribute("type", "button");
-            deleteButton.innerHTML = "X";
-            baseDiv.append(tag, deleteButton);
-            return baseDiv;
-        }
+        let image_upload_modal = $("#image_upload_modal")
 
         function emptyInput(input) {
             input.val("");
@@ -117,40 +94,19 @@
             }
         }
 
+        function clearUploadModal() {
+            $('#id_caption').val("");
+            $('#id_alt_text').val("");
+            image_upload_modal.modal('hide');
+        }
+
         function setCaretToPos (input, pos) {
           setSelectionRange(input, pos, pos);
         }
 
         $(document).ready(function() {
-            tagList.splice(0, tagList.length);
-
-            $("#id_blog_title").on('input', function(val) {
-                const date = new Date();
-                $("#hardcode_url").text("/blog/posts/" + date.getFullYear() + "/" + date.getMonth() + "/" + toSnakeCase(val.target.value));
-            });
-
             $('#id_blog_title').trigger("input");
 
-            $("#tagInput").keyup(function(key) {
-                /* keycode  - <<ENTER>> key */
-                if(key.which === 59) {
-                    var rawString = key.target.value;
-                    var tagString = rawString.substring(0, rawString.length - 1);
-
-                    if(tagString.length === 0){
-                        emptyInput($(this))
-                        return
-                    }
-
-                    if(tagString.length > MAX_TAG_LENGTH) {
-                        alert("Tag length too long! Tags should only be 32 characters long");
-                        return;
-                    }
-                    $('#tagIconList').append(generateTagDiv(tagString));
-                    tagList.push(tagString);
-                    emptyInput($(this));
-                }
-            });
 
             $("#image_upload_form").submit(function(e) {
                 e.preventDefault();
@@ -186,14 +142,15 @@
                     type: 'POST',
                     data: formData,
                     success: function(response) {
-                        console.log(response);
                         if(response.error) {
-                            $.each(response.errors, function(name, error) {console.log(name, error)})
+                            $.each(response.errors, function(name, error) { console.log(name, error) })
                         } else {
                             let image_tag = response['image_tag'];
                             if(image_tag !== null) {
                                 insertTag(image_tag);
                             }
+
+                            clearUploadModal();
                         }
                     },
                     cache: false,

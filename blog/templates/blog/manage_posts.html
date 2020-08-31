@@ -1,1 +1,36 @@
 {% extends "blog/blog_base.html" %}
+
+{% block body %}
+    <div class="row">
+    <div class="col" id="blog_manage_div">
+        <table>
+            <tr id="blog_manage_table">
+                <th class="table_header" id="blog_table_title">Title</th>
+                <th class="table_header" id="blog_table_synopsis">Synopsis</th>
+                <th class="table_header" id="blog_table_raw_body">Raw Body Location</th>
+                <th class="table_header" id="blog_table_html_fragment">HTML Fragment Location</th>
+                <th class="table_header text-center" id="blog_table_date_finished">Date Finished</th>
+                <th class="table_header text-center" id="blog_table_active">Active</th>
+                <th class="table_header text-center" id="blog_table_actions">Actions</th>
+            </tr>
+            {% if posts|length == 0 %}
+            <tr>
+                <td colspan="7" class="text-center" id="blog_manage_no_posts"><h2>No blog posts to manage!</h2></td>
+            </tr>
+            {% else %}
+            {% for post in posts %}
+                <tr id="blog_manage_table">
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.synopsis }}</td>
+                    <td>{{ post.raw_body_location }}</td>
+                    <td>{{ post.html_fragment_location }}</td>
+                    <td class="text-center">{{ post.date_finished|date:"d/m/Y" }}</td>
+                    <td class="text-center">{% if post.active %}Yes{% else %}No{% endif %}</td>
+                    <td class="text-center"><a href="{% url 'blog-post_details' pk=post.pk %}" class="text-info">View</a>|<a href="{% url 'blog-toggle-active' pk=post.pk %}" class="text-info">Toggle Active</a>|<a href="{% url 'blog-delete_post' pk=post.pk %}" class="text-danger">Delete</a></td>
+                </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+    </div>
+{% endblock body %}

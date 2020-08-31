@@ -52,10 +52,10 @@ def blog_new_view(request):
 			post = Post(title=blog_title, synopsis=blog_synopsis, active=True)
 			post.save()
 
-			parsed_body = bbp.parse_body("\r\n", blog_body, post)
+			parsed_body = bbp.parse_body(blog_body, post)
 
 			""" Move the images (if any) that were referenced in the body to their final static location """
-			move_images_to_media_root(post)
+			__move_images_to_media_root(post)
 
 			""" Save the body to a HTML file so that it can be loaded when somebody goes to view it, as well as the raw
 			 	text that makes up the body of the blog """
@@ -65,7 +65,7 @@ def blog_new_view(request):
 			if files_created_successfully:
 				post.save()
 
-			return redirect('blog-index_view')
+			return redirect('blog-index_view', permanent=True)
 	else:
 		form = CreatePost()
 		image_upload_form = UploadImage()
@@ -87,7 +87,32 @@ def blog_manage_posts(request):
 	return render(request, 'blog/manage_posts.html', {'title': "Manage posts", 'posts': all_posts})
 
 
-def move_images_to_media_root(blog_post: Post):
+@login_required
+def blog_toggle_active(request, pk: uuid4):
+	post = get_object_or_404(Post, pk=pk)
+	post.active = not post.active
+	post.save()
+	return redirect('/blog/posts/manage')
+
+
+@login_required
+def blog_delete_post(request, pk: uuid4):
+	post = get_object_or_404(Post, pk=pk)
+
+	if request.method == "POST":
+		html_fragment = post.html_fragment_location
+		raw_body = post.raw_body_location
+
+		media_utils.delete_file_in_media([html_fragment, raw_body])
+
+		post.delete()
+
+		return redirect('blog-manage-posts', permanent=True)
+
+	return render(request, 'blog/delete_post.html', {'title': 'Delete Blog Post', 'post': post})
+
+
+def __move_images_to_media_root(blog_post: Post):
 	# Get a list of all the objects with the current post's ID
 	images_to_move = BlogImageToMove.objects.filter(post_id=blog_post.id)
 
@@ -123,9 +148,26 @@ def _save_html_and_body_string_to_file(raw_body: str, blog_post: Post, html_stri
 
 
 def _write_file(path_to_write: str, data_to_write: str):
+	# If the path does not exist, then create it
+	if not os.path.exists(path_to_write):
+		to_create = "/".join(path_to_write.split("/")[:-1])
+		__create_directory_structure(to_create)
+
+	# Save the files to disk
 	try:
 		with open(path_to_write, "w") as fos:
 			fos.write(data_to_write)
+	except OSError:
+		report_exception()
+		return False
+	else:
+		return True
+
+
+def __create_directory_structure(path_to_create: str):
+	try:
+		if not os.path.exists(path_to_create):
+			os.makedirs(path_to_create)
 	except OSError:
 		report_exception()
 		return False
@@ -137,19 +179,12 @@ def _move_image_to_media_root(old_path: str, new_path: str):
 	# Get the directory structure to create ready to try and create it
 	new_image_directory = "/".join(new_path.split("/")[:-1])
 
-	try:
-		# Attempt to create the new directory if it doesn't exist already
-		if not os.path.exists(new_image_directory):
-			os.makedirs(new_image_directory)
-	except OSError:
-		# Creating the directory structure, set up log system to report the exact error with this at a later point
-		report_exception()
-		return False
-	else:
-		# Move the image to the newly created directory
+	# If the directory can be created (or already exists), then move the file to the new location
+	if __create_directory_structure(new_image_directory):
 		os.rename(old_path, new_path)
-
-	return True
+		return True
+	else:
+		return False
 
 
 @login_required

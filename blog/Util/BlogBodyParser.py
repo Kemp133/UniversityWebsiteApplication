@@ -24,9 +24,9 @@ __tag_map = {
 }
 
 
-def parse_body(delimiter: str, body: str, post: Post):
+def parse_body(body: str, post: Post):
 	""" Split input body into paragraphs around the \n tag """
-	paragraphs = [s for s in body.split(delimiter) if s.strip() != '']
+	paragraphs = [s for s in body.replace("\r", "\n").split("\n") if s.strip() != '']
 
 	""" Get list of all the tags """
 	# Create blog tag factory instance

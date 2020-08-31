@@ -14,3 +14,39 @@
 #blog_sidebar {
     padding: 0 10px;
 }
+
+table {
+    width: 100%;
+}
+
+#blog_manage_table td, #blog_manage_table th {
+    outline: solid 1px black;
+}
+
+#blog_table_active {
+    width: 5%;
+}
+
+#blog_table_actions {
+    width: 15%;
+}
+
+#blog_table_title, #blog_table_synopsis, #blog_table_raw_body, #blog_table_html_fragment, #blog_table_date_finished {
+    width: 15%;
+}
+
+.table_header {
+    text-align: center;
+}
+
+#blog_manage_div {
+    margin: 10px;
+}
+
+td {
+    padding-left: 5px;
+}
+
+#blog_manage_no_posts {
+    padding-top: 10px;
+}

@@ -5,7 +5,9 @@
         <div class="col-2"></div>
         <div class="col-8">
             <h1>{{ post.title }}</h1>
-            <br>
+            <br/>
+            <span class="text-muted">{{ post.date_finished|date:"d M, Y" }}</span>
+            <hr/>
             {% autoescape off %}
             {{ post_body }}
             {% endautoescape %}

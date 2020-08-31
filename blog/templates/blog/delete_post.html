@@ -1,0 +1,51 @@
+{% extends 'blog/blog_base.html' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <h1>Are you sure you want to do this?</h1>
+        <br/>
+        <h2>This action cannot be undone</h2>
+        <hr/>
+        <h3>Post Deleting:</h3>
+        <form method="post">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <th><label for="post_id">id</label></th>
+                    <td><input id="post_id" value="{{ post.id }}" disabled/></td>
+                </tr>
+                <tr>
+                    <th><label for="post_title">Title</label></th>
+                    <td><input id="post_title" value="{{ post.title }}" disabled/></td>
+                </tr>
+                <tr>
+                    <th><label for="post_synopsis">Synopsis</label></th>
+                    <td><input id="post_synopsis" value="{{ post.synopsis }}" disabled/></td>
+                </tr>
+                <tr>
+                    <th><label for="post_raw_body">Raw Body Location</label></th>
+                    <td><input id="post_raw_body" value="{{ post.raw_body_location }}" disabled/></td>
+                </tr>
+                <tr>
+                    <th><label for="post_html_fragment">Post HTML Fragment</label></th>
+                    <td><input id="post_html_fragment" value="{{ post.html_fragment_location }}" disabled/></td>
+                </tr>
+                <tr>
+                    <th><label for="post_date_finished">Date Finished</label></th>
+                    <td><input id="post_date_finished" value="{{ post.date_finished|date:"d/m/Y" }}" disabled/></td>
+                </tr>
+                <tr>
+                    <th><label for="post_active">Post Active</label></th>
+                    <td><input id="post_active" value="{{ post.active }}" disabled/></td>
+                </tr>
+            </table>
+            <button class="btn btn-outline-danger" type="submit">Delete Post</button>
+        </form>
+        <hr/>
+        <a href="{% url 'blog-manage-posts' %}" class="text-info text-center">Back To List</a>
+    </div>
+    <div class="col-3"></div>
+</div>
+{% endblock body %}
