@@ -218,7 +218,7 @@ def __deal_with_image(tag_data: str, post: Post):
 	image_set = BlogImageUpload.objects.filter(image=image_path)
 
 	# If the length of the queryset isn't one, then something's wrong
-	if len(image_set) is not 1:
+	if len(image_set) != 1:
 		# Could implement a feature in the future where broken references like this can be fixed after the
 		# initial upload
 		return None
