@@ -167,7 +167,7 @@ def __add_tag_to_tree(root_node: Tree, current_node: Tree, tag, current_nest_ind
 		nest_index = __nest_sensitive_elements.index(tag.__class__)
 
 		# Nesting must only increase by one at a given time, but can decrease an unbounded amount
-		if current_nest_index - nest_index > 1:
+		if nest_index - current_nest_index > 1:
 			# Nesting is incorrect, as in it skipped a nesting step
 			return None
 

@@ -50,3 +50,9 @@ td {
 #blog_manage_no_posts {
     padding-top: 10px;
 }
+
+.blog_card {
+    margin: 10px;
+    padding: 10px;
+    border: solid 1px black;
+}
