@@ -77,7 +77,7 @@ class BoldTag(__BlogTagBase):
 		return '[bB]'
 
 	def convert_to_html(self):
-		return f'<strong>{self.data}</strong>'
+		return f'<strong class="text-weight-bold">{self.data}</strong>'
 
 
 class ItalicTag(__BlogTagBase):
@@ -86,7 +86,7 @@ class ItalicTag(__BlogTagBase):
 		return '[iI]'
 
 	def convert_to_html(self):
-		return f'<emp>{self.data}</emp>'
+		return f'<emp class="text-weight-italic">{self.data}</emp>'
 
 
 class UnderlineTag(__BlogTagBase):
