@@ -77,6 +77,14 @@ class LoadCVTest(LiveServerTestCase):
 		self.rows_exist_in_table(skills_table, 0)
 		self.rows_exist_in_table(hobbies_table, 0)
 
-		# Past Experience
+		# The user then scrolls down to the final section, which shows my past work experience
+		## Check that there's at least one table containing this information
+		past_experience = self.browser.find_elements_by_class_name("table_PastExperience")
 
+		self.assertTrue(len(past_experience) > 1, "There isn't at least one table for the past experience section")
+
+		# The user scrolls down further realising this is the end of the CV. Heartbroken that it's come to an end, they
+		# decide to email me with a work offer purely based on how good my CV was (*wink wink*) ;)
+
+		# END OF TESTS
 		self.fail("Reached end of tests!")
