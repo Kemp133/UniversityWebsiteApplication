@@ -13,4 +13,4 @@ class CVPageTest(TestCase):
 		response = self.client.get("/cv/manage")
 
 		# Assert that the view redirects to the log in screen, as this view requires the user to be logged in
-		self.assertRedirects(response, "/account/login")
+		self.assertContains(response.url, "account/login")

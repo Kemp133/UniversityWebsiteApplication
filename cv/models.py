@@ -32,3 +32,9 @@ class Institution(models.Model):
 class Education(models.Model):
 	institution = models.ForeignKey(Institution, models.CASCADE)
 	subject = models.ForeignKey(Subject, models.CASCADE)
+
+
+class BasicInformation(models.Model):
+	information_name = models.CharField(max_length=256, blank=False)
+	information_value = models.CharField(max_length=256, blank=False)
+	active = models.BooleanField(default=True)

@@ -1,0 +1,25 @@
+{% extends "cv/base.html" %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div id="div_BasicInformation">
+                <a href="{% url 'cv-add-basic-information' %}" id="btn_AddBasicInformation"><button class="btn btn-outline-success">Add Basic Information</button></a>
+            </div>
+            <div id="div_PastEducation">
+                <a href="add/PastEducation" id="btn_AddPastEducation"><button class="btn btn-outline-success">Add Past Education</button></a>
+            </div>
+            <div id="div_Skills">
+                <a href="add/Skill" id="btn_AddSkills"><button class="btn btn-outline-success">Add Skill</button></a>
+            </div>
+            <div id="div_Hobbies">
+                <a href="add/Hobby" id="btn_AddHobbies"><button class="btn btn-outline-success">Add Hobby</button></a>
+            </div>
+            <div id="div_PastExperience">
+                <a href="add/PastExperience" id="btn_AddPastExperience"><button class="btn btn-outline-success">Add Past Experience</button></a>
+            </div>
+        </div>
+        <div class="col-2"></div>
+    </div>
+{% endblock body %}

@@ -1,0 +1,24 @@
+{% extends "cv/base.html" %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <form method="POST">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <th><label for="info_name">Information Name</label></th>
+                        <td><input id="info_name" type="text" maxlength="256" required/></td>
+                    </tr>
+                    <tr>
+                        <th><label for="info_value">Information Value</label></th>
+                        <td><input id="info_value" type="text" maxlength="256" required/></td>
+                    </tr>
+                </table>
+                <button type="submit" class="btn btn-outline-success">Add</button>
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+{% endblock body %}

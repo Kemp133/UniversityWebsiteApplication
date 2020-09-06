@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common.exceptions import NoSuchElementException
 
-from django.test import LiveServerTestCase
+from django.test import LiveServerTestCase, Client
 
 import unittest
 import time
@@ -91,20 +91,56 @@ class LoadCVTest(LiveServerTestCase):
 		self.fail("Reached end of tests!")
 
 	def test_can_modify_cv_attributes(self):
-		# I come to realise that the CV is missing some information, so I decide to modify the CV to add this
-		# information
+		# I realise that I might need to add information to these sections in the future, so I make sure the modify view
+		# has all the required sections to add this data
 
 		## Attempt to navigate to the modify view
 		self.browser.get(f"{self.live_server_url}/cv/manage")
 
-		## Verify that the view is redirected to the log in view as I haven't been authenticated yet
-		self.assertEqual(self.browser.title, "Log In")
-
-		# The log in screen comes up, so I enter my credentials to allow myself access to the modify view
-		time.sleep(10)
-
 		## Check that the browser title is now equal to Manage CV
 		self.assertEqual(self.browser.title, "Manage CV")
 
+		## Check that there's a section for each type of information on the page
+		divs_to_check = ["div_BasicInformation", "div_PastEducation", "div_Skills", "div_Hobbies", "div_PastExperience"]
+
+		for val in divs_to_check:
+			divs = self.browser.find_elements_by_id(val)
+			self.assertEqual(len(divs), 1, f"{val} div was not found on the page")
+
+		btns_to_check = ["btn_AddBasicInformation", "btn_AddPastEducation", "btn_AddSkills", "btn_AddHobbies", "btn_AddPastExperience"]
+
+		for val in btns_to_check:
+			divs = self.browser.find_elements_by_id(val)
+			self.assertEqual(len(divs), 1, f"{val} button not found on page")
+
+
 		# Reached end of test
 		self.fail("Reached end of test!")
+
+	def test_can_add_new_basic_information(self):
+		# I realise I forgot something when I was adding the original list items, so I go to the manage view
+		self.browser.get(f"{self.live_server_url}/cv/manage")
+
+		# I then click on the "Add Basic Information" button and get redirected to the add information view
+		btn = self.browser.find_element_by_id("btn_AddBasicInformation")
+		btn.click()
+
+		## Give the browser a couple of seconds to catch up
+		time.sleep(3)
+
+		# Check that we are in the correct view
+		self.assertEqual(self.browser.current_url, f"{self.live_server_url}/cv/manage/new/BasicInformation")
+
+		# Add the required data to the form
+		info_name = self.browser.find_element_by_id("info_name")
+		info_value = self.browser.find_element_by_id("info_value")
+		submit = self.browser.find_elements_by_tag_name("button")[0]
+
+		info_name.send_keys("Testing name")
+		info_value.send_keys("Testing value")
+
+		submit.click()
+
+
+
+
