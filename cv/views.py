@@ -22,6 +22,7 @@ def index(request):
 											  'experience': experience})
 
 
+@login_required
 def manage(request):
 	basic_information = BasicInformation.objects.all()[:5]
 	skills = Skill.objects.all()
@@ -37,6 +38,7 @@ def manage(request):
 											  'experience': experience})
 
 
+@login_required
 def add_basic_information(request):
 	if request.method == "POST":
 		info_name = request.POST.get('name', '')
@@ -52,6 +54,7 @@ def add_basic_information(request):
 	return render(request, 'cv/add/add_basic_information.html', {'title': 'Add Basic Information'})
 
 
+@login_required
 def toggle_basic_information(request, pk):
 	bi = get_object_or_404(BasicInformation, pk=pk)
 	bi.active = not bi.active
@@ -60,6 +63,7 @@ def toggle_basic_information(request, pk):
 	return redirect('cv-manage', permanent=True)
 
 
+@login_required
 def delete_basic_information(request, pk):
 	bi = get_object_or_404(BasicInformation, pk=pk)
 
@@ -72,6 +76,7 @@ def delete_basic_information(request, pk):
 																	   'basic_information': bi})
 
 
+@login_required
 def add_past_education(request):
 	if request.method == "POST":
 		form = InstituteForm(request.POST)
@@ -94,6 +99,7 @@ def add_past_education(request):
 															  'form': form})
 
 
+@login_required
 def delete_education(request, pk: int):
 	# Get an instance of the current object
 	education = get_object_or_404(Education, pk=pk)
@@ -117,6 +123,7 @@ def delete_education(request, pk: int):
 														'education': education})
 
 
+@login_required
 def add_subject_to_education(request, pk: int):
 	education = get_object_or_404(Education, pk=pk)
 
@@ -139,6 +146,7 @@ def add_subject_to_education(request, pk: int):
 																'form': form})
 
 
+@login_required
 def toggle_subject(request, pk):
 	subject = get_object_or_404(Subject, pk=pk)
 	subject.active = not subject.active
@@ -147,6 +155,7 @@ def toggle_subject(request, pk):
 	return redirect('cv-manage', permanent=True)
 
 
+@login_required
 def delete_subject(request, pk):
 	subject = get_object_or_404(Subject, pk=pk)
 
@@ -158,6 +167,7 @@ def delete_subject(request, pk):
 													  'subject': subject})
 
 
+@login_required
 def add_skill(request):
 	if request.method == "POST":
 		skill_name = request.POST.get('skill_name', '')
@@ -173,6 +183,7 @@ def add_skill(request):
 	return render(request, 'cv/add/add_skill.html', {'title': 'Add Skill'})
 
 
+@login_required
 def toggle_skill(request, pk):
 	skill = get_object_or_404(Skill, pk=pk)
 	skill.active = not skill.active
@@ -181,6 +192,7 @@ def toggle_skill(request, pk):
 	return redirect('cv-manage', permanent=True)
 
 
+@login_required
 def delete_skill(request, pk):
 	skill = get_object_or_404(Skill, pk=pk)
 
@@ -193,6 +205,7 @@ def delete_skill(request, pk):
 													'skill': skill})
 
 
+@login_required
 def add_hobby(request):
 	if request.method == "POST":
 		hobby_name = request.POST.get('hobby_name', '')
@@ -208,6 +221,7 @@ def add_hobby(request):
 	return render(request, 'cv/add/add_hobby.html', {'title': 'Add Hobby'})
 
 
+@login_required
 def toggle_hobby(request, pk):
 	hobby = get_object_or_404(Hobby, pk=pk)
 	hobby.active = not hobby.active
@@ -216,6 +230,7 @@ def toggle_hobby(request, pk):
 	return redirect('cv-manage', permanent=True)
 
 
+@login_required
 def delete_hobby(request, pk):
 	hobby = get_object_or_404(Hobby, pk=pk)
 
@@ -228,6 +243,7 @@ def delete_hobby(request, pk):
 														   'hobby': hobby})
 
 
+@login_required
 def add_past_experience_institute(request):
 	if request.method == "POST":
 		form = InstituteForm(request.POST)
@@ -248,6 +264,7 @@ def add_past_experience_institute(request):
 																		 'form': form})
 
 
+@login_required
 def add_past_experience(request, pk):
 	pe = get_object_or_404(PastExperience, pk=pk)
 	if request.method == "POST":
@@ -269,6 +286,7 @@ def add_past_experience(request, pk):
 															   'form': form})
 
 
+@login_required
 def delete_past_experience(request, pk):
 	experience = get_object_or_404(PastExperience, pk=pk)
 
@@ -289,6 +307,7 @@ def delete_past_experience(request, pk):
 																	 'experience': experience})
 
 
+@login_required
 def delete_experience(request, pk):
 	experience = get_object_or_404(Experience, pk=pk)
 
