@@ -2,44 +2,177 @@
 
 {% block body %}
     <div class="row">
-        <h1 class="text-center">My CV</h1>
-    </div>
-    <div class="row">
         <div class="col-3"></div>
         <div class="col-6">
-            <div id="div_BasicInfo">
-                <table id="table_BasicInfo">
+            <h1 class="text-center">My CV</h1>
+            <br>
+            <div id="div_BasicInfo" class="cv_div">
+                <h3 class="text-center">Basic information</h3>
+
+                <hr/>
+
+                <table id="table_BasicInfo" class="form_table">
+                    {% if basic_information|length != 0 %}
+                    {% for bi in basic_information %}
                     <tr>
-                        <th><label>Name:</label></th>
-                        <td>Johnathon Kemp</td>
+                        <th><h6>{{ bi.information_name }}</h6></th>
+                        <td>{{ bi.information_value }}</td>
                     </tr>
+                    {% endfor %}
+                    {% else %}
                     <tr>
-                        <th><label>Email:</label></th>
-                        <td>kemp133@googlemail.com</td>
+                        <td><h4>No data to display (yet)</h4></td>
                     </tr>
+                    {% endif %}
                 </table>
             </div>
-        </div>
-        <div id="div_PastEducation">
-            <table class="table_PastEducation" id="id_SecondaryEducation">
-                <tr></tr>
-            </table>
-            <table class="table_PastEducation" id="id_CollegeEducation">
-                <tr></tr>
-            </table>
-        </div>
-        <div id="div_SkillsNHobbies">
-            <table id="table_Skills">
-                <tr></tr>
-            </table>
-            <table id="table_Hobbies">
-                <tr></tr>
-            </table>
-        </div>
-        <div id="div_PastExperience">
-            <table class="table_PastExperience">
 
-            </table>
+            <hr/>
+
+            <div id="div_PastEducation" class="cv_div">
+                <h3 class="text-center">Past Education</h3>
+
+                <hr/>
+
+                {% if education|length != 0 %}
+                {% for edu in education %}
+                <div class="div_education">
+                    <h4>Educational Institute: {{ edu.institution.name }}</h4>
+
+                    <hr/>
+
+                    <h4>Institute Address:</h4>
+                    {{ edu.institution.address_line_1 }}<br/>
+                    {{ edu.institution.address_line_2 }}<br/>
+                    {% if edu.institution.address_line_3|length != 0 %}
+                        {{ edu.institution.address_line_3 }}<br>
+                    {% endif %}
+                    {{ edu.institution.address_line_4 }}<br/>
+                    {{ edu.institution.post_code }}
+
+                    <hr/>
+
+                    <table class="table_education form_table">
+                        <tr>
+                            <th><h6>Subject Name</h6></th>
+                            <th><h6>Subject Stage</h6></th>
+                            <th><h6>Predicted Grade</h6></th>
+                            <th><h6>Actual Grade</h6></th>
+                        </tr>
+                        {% if edu.subject.all|length != 0 %}
+                        {% for sub in edu.subject.all %}
+                        <tr>
+                            <td>{{ sub.name }}</td>
+                            <td>{{ sub.get_stage_display }}</td>
+                            <td>{{ sub.predicted_grade }}</td>
+                            <td>{{ sub.actual_grade }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                            <tr><td colspan="4"><h4>No grades for this educational institute</h4></td></tr>
+                        {% endif %}
+                    </table>
+                </div>
+                {% endfor %}
+                {% else %}
+                    <h4 class="text-center">No data to display (yet)</h4>
+                {% endif %}
+            </div>
+
+            <hr/>
+
+            <div id="div_SkillsNHobbies" class="cv_div">
+                <h3 class="text-center">Skills & Hobbies</h3>
+
+                <br/>
+
+                <h4>Skills</h4>
+                <table id="table_Skills" class="form_table">
+                    <tr>
+                        <th><h6>Skill Name</h6></th>
+                        <th><h6>Skill Description</h6></th>
+                    </tr>
+                    {% if skills|length != 0  %}
+                        {% for skill in skills %}
+                    <tr>
+                        <th>{{ skill.skill_name }}</th>
+                        <td>{{ skill.skill_explanation }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr><td colspan="2"><h4>No data to display (yet)</h4></td></tr>
+                    {% endif %}
+                </table>
+
+                <br/>
+
+                <h4>Hobbies</h4>
+                <table id="table_Hobbies" class="form_table">
+                <tr>
+                    <th><h6>Hobby Name</h6></th>
+                    <th><h6>Hobby Description</h6></th>
+                </tr>
+                {% if hobbies|length != 0 %}
+                    {% for hobby in hobbies %}
+                    <tr>
+                        <th>{{ hobby.hobby_name }}</th>
+                        <td>{{ hobby.hobby_description }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="2">No values to display</td></tr>
+                {% endif %}
+                </table>
+            </div>
+
+            <hr/>
+
+            <div id="div_PastExperiences">
+                <h3 class="text-center">Past Experience</h3>
+
+                <hr/>
+                {% if experience|length != 0 %}
+                    {% for exp in experience %}
+                    <div class="div_PastExperience">
+                        <h4>Work Institute Name: {{ exp.institution.name }}</h4>
+
+                        <hr/>
+
+                        <h4>Institute Address:</h4>
+                        {{ exp.institution.address_line_1 }}<br/>
+                        {{ exp.institution.address_line_2 }}<br/>
+                        {% if exp.institution.address_line_3|length != 0 %}
+                            {{ exp.institution.address_line_3 }}<br>
+                        {% endif %}
+                        {{ exp.institution.address_line_4 }}<br/>
+                        {{ exp.institution.post_code }}
+
+                        <hr/>
+
+                        {% if exp.experience.all|length != 0 %}
+                        <table class="table_PastExperience form_table">
+                            <tr>
+                                <th><h6>Placement Start</h6></th>
+                                <th><h6>Placement End</h6></th>
+                                <th><h6>Notes</h6></th>
+                            </tr>
+                            {% for pe in exp.experience.all %}
+                            <tr>
+                                <td>{{ pe.placement_start }}</td>
+                                <td>{{ pe.placement_end }}</td>
+                                <td>{{ pe.notes }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        {% else %}
+                        <h4>No experience at this institution to display</h4>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <h4>No past experience to display</h4>
+                {% endif %}
+            </div>
         </div>
         <div class="col-3"></div>
     </div>

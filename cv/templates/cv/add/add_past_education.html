@@ -1,3 +1,9 @@
 {% extends "cv/add/add_institute.html" %}
 
 {% block form_title %}Add Educational Institute{% endblock form_title %}
+
+{% block form %}
+<table>
+{{ form.as_table }}
+</table>
+{% endblock %}

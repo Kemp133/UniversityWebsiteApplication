@@ -1,11 +1,11 @@
 table {
     width: 100%;
-    border: solid 1px black;
+    /*border: solid 1px black;*/
     margin: 5px 0;
 }
 
 tr {
-    border: solid 1px black;
+    /*border: solid 1px black;*/
 }
 
 th, td {
@@ -20,4 +20,24 @@ th, td {
 
 select {
     width: 100%;
+}
+
+.div_experience {
+    padding: 5px;
+    margin: 5px 0;
+    border: solid 1px black;
+}
+
+.div_experience_title h4 {
+    display: inline;
+}
+
+.form_table tr {
+    outline: solid 1px black;
+}
+
+.div_PastExperience {
+    padding: 5px;
+    margin: 5px 0;
+    border: solid 1px black;
 }

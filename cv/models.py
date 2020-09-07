@@ -14,7 +14,14 @@ class Subject(models.Model):
 		FAIL = 'FAIL', 'FAIL'
 		NONE = 'N/A', 'N/A'
 
+	class EducationStage(models.TextChoices):
+		GCSE = "GCSE", "GCSE"
+		A_LEVEL = "A_LEVEL", "A Level"
+		HIGHER = "HIGHER", "Higher Education"
+		NONE = "NONE", "N/a"
+
 	name = models.CharField(max_length=64)
+	stage = models.CharField(max_length=8, choices=EducationStage.choices, default=EducationStage.NONE)
 	predicted_grade = models.CharField(max_length=4, choices=Grades.choices, default=Grades.NONE)
 	actual_grade = models.CharField(max_length=4, choices=Grades.choices, default=Grades.NONE)
 	active = models.BooleanField(default=True)
@@ -52,15 +59,15 @@ class Hobby(models.Model):
 	active = models.BooleanField(default=True)
 
 
-class Placement(models.Model):
+class Experience(models.Model):
 	placement_start = models.DateField()
-	placement_end = models.DateField(blank=True)
+	placement_end = models.DateField(blank=True, null=True)
 	notes = models.TextField()
 	active = models.BooleanField(default=True)
 
 
 class PastExperience(models.Model):
 	institution = models.ForeignKey(Institution, models.CASCADE)
-	placement = models.ManyToManyField(Placement, related_name='past_experience')
+	experience = models.ManyToManyField(Experience, related_name='past_experience')
 
 

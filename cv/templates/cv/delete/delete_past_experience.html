@@ -1,0 +1,48 @@
+{% extends 'cv/form_base.html' %}
+
+{% block form_head %}
+<h1>Are you sure you want to delete all data for this institute?</h1>
+<br>
+<h5>Deleting information for: {{ experience.institution.name }}</h5>
+{% endblock %}
+
+{% block form %}
+    <table class="form_table">
+        <tr>
+            <th>Institute Address</th>
+            <td>
+                {{ experience.institution.address_line_1 }}<br>
+                {{ experience.institution.address_line_2 }}<br>
+                {% if experience.institution.address_line_3|length != 0 %}{{ experience.institution.address_line_3 }}{% else %}[[Null]]{% endif %}<br>
+                {{ experience.institution.address_line_4 }}<br>
+                {{ experience.institution.post_code }}
+            </td>
+        </tr>
+    </table>
+    <hr/>
+    <h4>Experience tied to this institution</h4>
+    <table class="form_table">
+        <tr>
+            <th>Placement Start</th>
+            <th>Placement End</th>
+            <th>Notes</th>
+            <th>Active</th>
+        </tr>
+        {% if experience.experience.all|length != 0 %}
+        {% for exp in experience.experience.all %}
+        <tr>
+            <td>exp.placement_start</td>
+            <td>exp.placement_end</td>
+            <td>exp.notes</td>
+            <td>exp.active</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="4"><h4>No experience to show</h4></td>
+        </tr>
+        {% endif %}
+    </table>
+{% endblock %}
+
+{% block submit_button %}<button type="submit" class="btn btn-outline-danger">Delete Experience At Institution</button>{% endblock %}

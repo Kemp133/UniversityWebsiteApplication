@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (index, manage, add_basic_information, add_past_education, add_skill, add_hobby, add_past_experience,
 					add_subject_to_education, delete_education, toggle_subject, delete_subject, toggle_skill,
-					delete_skill, toggle_hobby, delete_hobby, toggle_basic_information, delete_basic_information)
+					delete_skill, toggle_hobby, delete_hobby, toggle_basic_information, delete_basic_information,
+					add_past_experience_institute, delete_past_experience, delete_experience)
 
 
 urlpatterns = [
@@ -21,5 +22,8 @@ urlpatterns = [
 	path("manage/add/hobby", add_hobby, name='cv-add-hobby'),
 	path("manage/toggle/hobby/<int:pk>", toggle_hobby, name="cv-toggle-hobby"),
 	path("manage/delete/hobby/<int:pk>", delete_hobby, name="cv-delete-hobby"),
-	path("manage/add/PastExperience", add_past_experience, name='cv-add-past-experience'),
+	path("manage/add/PastExperienceInstitute", add_past_experience_institute, name='cv-add-past-experience-institute'),
+	path("manage/add/PastExperience/<int:pk>", add_past_experience, name='cv-add-experience'),
+	path("manage/delete/PastExperience/<int:pk>", delete_past_experience, name='cv-delete-past-experience'),
+	path("manage/delete/experience/<int:pk>", delete_experience, name='cv-delete-experience')
 ]

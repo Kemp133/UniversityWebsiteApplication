@@ -1,0 +1,15 @@
+{% extends 'cv/form_base.html' %}
+
+{% block form_head %}
+<h2>Add Experience To Institution</h2>
+<br/>
+    <h5>Adding experience for the following institution: {{ past_experience.institution.name }}</h5>
+{% endblock %}
+
+{% block form %}
+<table>
+{{ form.as_table }}
+</table>
+{% endblock %}
+
+{% block submit_button %}<button type="submit" class="btn btn-outline-success">Add Experience</button>{% endblock %}

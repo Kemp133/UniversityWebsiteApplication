@@ -1,21 +1,33 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .models import BasicInformation, PastExperience, Skill, Hobby, PastExperience, Institution, Education, Subject
-from .forms import SubjectForm
+from .models import (BasicInformation, PastExperience, Skill, Hobby, PastExperience, Institution, Education, Subject,
+					 Experience)
+from .forms import SubjectForm, InstituteForm, ExperienceForm
 
 
 # Create your views here.
 def index(request):
-	return render(request, "cv/index.html", {'title': 'My CV'})
-
-
-def manage(request):
 	basic_information = BasicInformation.objects.all()[:5]
 	skills = Skill.objects.all()[:5]
 	hobbies = Hobby.objects.all()[:5]
 	education = Education.objects.all()[:5]
 	experience = PastExperience.objects.all()[:5]
+
+	return render(request, "cv/index.html", {'title': 'My CV',
+											  'basic_information': basic_information,
+											  'skills': skills,
+											  'hobbies': hobbies,
+											  'education': education,
+											  'experience': experience})
+
+
+def manage(request):
+	basic_information = BasicInformation.objects.all()[:5]
+	skills = Skill.objects.all()
+	hobbies = Hobby.objects.all()
+	education = Education.objects.all()
+	experience = PastExperience.objects.all()
 
 	return render(request, "cv/manage.html", {'title': 'Manage CV',
 											  'basic_information': basic_information,
@@ -60,38 +72,26 @@ def delete_basic_information(request, pk):
 																	   'basic_information': bi})
 
 
-def save_institute_from_post(post: dict):
-	# Get required fields from the form
-	institute_name = post.get('institute_name', '')
-	address_line_1 = post.get('address_line_1', '')
-	address_line_2 = post.get('address_line_2', '')
-	address_line_3 = post.get('address_line_3', '')
-	address_line_4 = post.get('address_line_4', '')
-	postcode = post.get('postcode', '')
-
-	institute = Institution()
-	institute.name = institute_name
-	institute.address_line_1 = address_line_1
-	institute.address_line_2 = address_line_2
-	institute.address_line_3 = address_line_3
-	institute.address_line_4 = address_line_4
-	institute.post_code = postcode
-	institute.save()
-
-	return institute
-
-
 def add_past_education(request):
 	if request.method == "POST":
-		institute = save_institute_from_post(request.POST)
+		form = InstituteForm(request.POST)
 
-		education = Education()
-		education.institution = institute
-		education.save()
+		if form.is_valid():
+			# Save the institute object to the database, and get a reference to the created object ready to create an
+			# instance of Education
+			institute: Institution
+			institute = form.save(commit=False)
+			institute.save()
 
-		return redirect('cv-manage', permanent=True)
+			education = Education()
+			education.institution = institute
+			education.save()
 
-	return render(request, 'cv/add/add_past_education.html', {'title': 'Add Past Education'})
+			return redirect('cv-manage', permanent=True)
+
+	form = InstituteForm()
+	return render(request, 'cv/add/add_past_education.html', {'title': 'Add Past Education',
+															  'form': form})
 
 
 def delete_education(request, pk: int):
@@ -228,8 +228,73 @@ def delete_hobby(request, pk):
 														   'hobby': hobby})
 
 
-def add_past_experience(request):
+def add_past_experience_institute(request):
 	if request.method == "POST":
-		pass
+		form = InstituteForm(request.POST)
 
-	return render(request, 'cv/add/add_past_experience.html', {'title': 'Add Past Experience'})
+		if form.is_valid():
+			institute: Institution
+			institute = form.save(commit=False)
+			institute.save()
+
+			pe = PastExperience()
+			pe.institution = institute
+			pe.save()
+
+			return redirect('cv-manage', permanent=True)
+
+	form = InstituteForm()
+	return render(request, 'cv/add/add_past_experience_institute.html', {'title': 'Add Past Experience Institute',
+																		 'form': form})
+
+
+def add_past_experience(request, pk):
+	pe = get_object_or_404(PastExperience, pk=pk)
+	if request.method == "POST":
+		form = ExperienceForm(request.POST)
+
+		if form.is_valid():
+			exp: Experience
+			exp = form.save(commit=False)
+			exp.save()
+
+			pe.experience.add(exp)
+			pe.save()
+
+			return redirect('cv-manage', permanent=True)
+
+	form = ExperienceForm()
+	return render(request, 'cv/add/add_past_experience.html', {'title': 'Add Past Experience',
+															   'past_experience': pe,
+															   'form': form})
+
+
+def delete_past_experience(request, pk):
+	experience = get_object_or_404(PastExperience, pk=pk)
+
+	if request.method == "POST":
+		# Delete all the experience for this object
+		for val in experience.experience.all():
+			val.delete()
+
+		# Delete the institution
+		experience.institution.delete()
+
+		# Now delete this object
+		experience.delete()
+
+		return redirect('cv-manage', permanent=True)
+
+	return render(request, 'cv/delete/delete_past_experience.html', {'title': 'Delete Experience',
+																	 'experience': experience})
+
+
+def delete_experience(request, pk):
+	experience = get_object_or_404(Experience, pk=pk)
+
+	if request.method == "POST":
+		experience.delete()
+		return redirect('cv-manage', permanent=True)
+
+	return render(request, 'cv/delete/delete_experience.html', {'title': 'Delete Experience',
+																'experience': experience})

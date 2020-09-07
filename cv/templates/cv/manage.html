@@ -6,12 +6,12 @@
         <div class="col-8">
             <div id="div_BasicInformation">
             <h3>Basic Information</h3>
-                <table>
+                <table class="form_table">
                     <tr>
                         <th>Information Name</th>
                         <th>Information Value</th>
                         <th style="width:10%">Active</th>
-                        <th>Actions</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                     {% if basic_information|length != 0 %}
                     {% for bi in basic_information %}
@@ -51,9 +51,10 @@
                         {{ edu.institution.post_code }}
                         <hr/>
 
-                        <table>
+                        <table class="form_table">
                             <tr>
                                 <th>Subject</th>
+                                <th>Subject Grade</th>
                                 <th>Predicted Grade</th>
                                 <th>Actual Grade</th>
                                 <th class="text-center">Actions</th>
@@ -62,6 +63,7 @@
                             {% for sub in edu.subject.all %}
                                 <tr>
                                     <td>{{ sub.name }}</td>
+                                    <td>{{ sub.get_stage_display }}</td>
                                     <td>{{ sub.predicted_grade }}</td>
                                     <td>{{ sub.actual_grade }}</td>
                                     <td class="text-center">
@@ -72,7 +74,7 @@
                             {% endfor %}
                             {% else %}
                                 <tr>
-                                    <td colspan="4"><h4>No Data To Show</h4></td>
+                                    <td colspan="5"><h4>No Data To Show</h4></td>
                                 </tr>
                             {% endif %}
                         </table>
@@ -90,7 +92,7 @@
             <hr/>
             <div id="div_Skills">
             <h3>Skills</h3>
-                <table>
+                <table class="form_table">
                     <tr>
                         <th>Skill Name</th>
                         <th>Skill Explanation</th>
@@ -121,7 +123,7 @@
             <hr/>
             <div id="div_Hobbies">
             <h3>Hobbies</h3>
-                <table>
+                <table class="form_table">
                     <tr>
                         <th>Hobby Name</th>
                         <th>Hobby Description</th>
@@ -155,42 +157,52 @@
                 {% if experience|length != 0 %}
                     {% for exp in experience %}
                     <div class="div_experience">
-                        <h6>Institute Name:</h6>
-                        {{ exp.institution.name }}<br/>
-                        <h6>Institute Address:</h6>
+                        <h4>Institute Name: {{ exp.institution.name }}</h4>
+                        <hr/>
+                        <h4>Institute Address:</h4>
                         {{ exp.institution.address_line_1 }}<br/>
                         {{ exp.institution.address_line_2 }}<br/>
-                        {{ exp.institution.address_line_3 }}<br/>
-                        {% if exp.institution.address_line_4|length != 0 %}
-                            {{ exp.institution.address_line_4 }}<br>
+                        {% if exp.institution.address_line_3|length != 0 %}
+                            {{ exp.institution.address_line_3 }}<br>
                         {% endif %}
+                        {{ exp.institution.address_line_4 }}<br/>
                         {{ exp.institution.post_code }}
+
                         <hr/>
 
-                        <table>
+                        <table class="form_table">
                             <tr>
                                 <th>Placement Start</th>
                                 <th>Placement End</th>
                                 <th>Notes</th>
                                 <th>Active?</th>
+                                <th class="text-center">Actions</th>
                             </tr>
+                            {% if exp.experience.all|length != 0 %}
+                            {% for pe in exp.experience.all %}
                             <tr>
-                                <td>{{ exp.placement_start }}</td>
-                                <td>{{ exp.placement_end }}</td>
-                                <td>{{ exp.notes }}</td>
-                                <td>{% if exp.active %}Yes{% else %}No{% endif %}</td>
+                                <td>{{ pe.placement_start }}</td>
+                                <td>{{ pe.placement_end }}</td>
+                                <td>{{ pe.notes }}</td>
+                                <td>{% if pe.active %}Yes{% else %}No{% endif %}</td>
+                                <td class="text-center"><a href="{% url 'cv-delete-experience' pk=pe.pk %}" id="btn_DeleteExperience" class="text-danger">Delete</a></td>
                             </tr>
+                            {% endfor%}
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center"><h4>No Experience Added Yet</h4></td>
+                            </tr>
+                            {% endif %}
                         </table>
-                        <a href="{% url 'cv-add-subject-to-education' pk=edu.pk %}" id="btn_AddSubjectToEducation"><button class="btn btn-outline-success">Add Subject To This Education</button></a>
+                        <a href="{% url 'cv-add-experience' pk=exp.pk %}" id="btn_AddExperienceToPastExperience"><button class="btn btn-outline-success">Add Experience To This Institution</button></a>
                         <hr/>
-                        <a href="{% url 'cv-delete-education' pk=edu.pk %}" id="btn_DeleteEducation"><button class="btn btn-outline-danger">Delete This Education</button></a>
+                        <a href="{% url 'cv-delete-past-experience' pk=exp.pk %}" id="btn_DeletePastExperience"><button class="btn btn-outline-danger">Delete This Experience</button></a>
                     </div>
-                        </div>
-                    {% endfor %}
+                {% endfor %}
                 {% else %}
                     <h4>No Experience To Show</h4>
                 {% endif %}
-                <a href="{% url 'cv-add-past-experience' %}" id="btn_AddPastExperience"><button class="btn btn-outline-success">Add Institute</button></a>
+                <a href="{% url 'cv-add-past-experience-institute' %}" id="btn_AddPastExperience"><button class="btn btn-outline-success">Add Institute</button></a>
             </div>
         </div>
         <div class="col-2"></div>

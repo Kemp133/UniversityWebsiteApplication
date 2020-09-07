@@ -7,13 +7,13 @@
 {% endblock form_head %}
 
 {% block form %}
-<table>
+<table class="form_table">
     <tr>
         <th>Institute Address</th>
         <td>
             {{ education.institution.address_line_1 }}<br>
             {{ education.institution.address_line_2 }}<br>
-            {{ education.institution.address_line_3 }}<br>
+            {% if education.institution.address_line_3|length != 0 %}{{ education.institution.address_line_3 }}{% else %}[[Null]]{% endif %}<br>
             {{ education.institution.address_line_4 }}<br>
             {{ education.institution.post_code }}
         </td>
@@ -21,7 +21,7 @@
 </table>
 <hr/>
 <h4>Subjects tied to this institute</h4>
-<table>
+<table class="form_table">
     <tr>
         <th>Subject Name</th>
         <th>Predicted Grade</th>

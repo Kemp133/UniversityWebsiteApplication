@@ -1,32 +1,3 @@
 {% extends "cv/form_base.html" %}
 
-{% block form %}
-<table>
-    <tr>
-        <th><label for="institute_name">Institute Name</label></th>
-        <td><input id="institute_name" name="institute_name" type="text" maxlength="256" required/></td>
-    </tr>
-    <tr>
-        <th><label for="address_line_1">Address Line 1</label></th>
-        <td><input id="address_line_1" name="address_line_1" type="text" maxlength="256" required/></td>
-    </tr>
-    <tr>
-        <th><label for="address_line_2">Address Line 2</label></th>
-        <td><input id="address_line_2" name="address_line_2" type="text" maxlength="256" required/></td>
-    </tr>
-    <tr>
-        <th><label for="address_line_3">Address Line 3</label></th>
-        <td><input id="address_line_3" name="address_line_3" type="text" maxlength="256"/></td>
-    </tr>
-    <tr>
-        <th><label for="address_line_4">County</label></th>
-        <td><input id="address_line_4" name="address_line_4" type="text" maxlength="256" required/></td>
-    </tr>
-    <tr>
-        <th><label for="postcode">Postcode</label></th>
-        <td><input id="postcode" name="postcode" type="text" maxlength="8" required/></td>
-    </tr>
-</table>
-{% endblock form %}
-
 {% block submit_button %}<button type="submit" class="btn btn-success">Add Institute</button>{% endblock submit_button %}
