@@ -41,3 +41,11 @@ select {
     margin: 5px 0;
     border: solid 1px black;
 }
+
+#table_BasicInfo {
+    width: 70%;
+}
+
+#table_tr_BasicInfo_name {
+    width: 40%;
+}

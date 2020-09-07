@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (index, manage, add_basic_information, add_past_education, add_skill, add_hobby, add_past_experience,
 					add_subject_to_education, delete_education, toggle_subject, delete_subject, toggle_skill,
 					delete_skill, toggle_hobby, delete_hobby, toggle_basic_information, delete_basic_information,
-					add_past_experience_institute, delete_past_experience, delete_experience)
+					add_past_experience_institute, delete_past_experience, delete_experience,
+					update_experience_with_finish_date)
 
 
 urlpatterns = [
@@ -25,5 +26,6 @@ urlpatterns = [
 	path("manage/add/PastExperienceInstitute", add_past_experience_institute, name='cv-add-past-experience-institute'),
 	path("manage/add/PastExperience/<int:pk>", add_past_experience, name='cv-add-experience'),
 	path("manage/delete/PastExperience/<int:pk>", delete_past_experience, name='cv-delete-past-experience'),
-	path("manage/delete/experience/<int:pk>", delete_experience, name='cv-delete-experience')
+	path("manage/delete/experience/<int:pk>", delete_experience, name='cv-delete-experience'),
+	path("manage/update/experience/<int:pk>", update_experience_with_finish_date, name='cv-update-experience-with-finish-date')
 ]

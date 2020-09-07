@@ -22,3 +22,12 @@ class ExperienceForm(ModelForm):
 			'placement_start': SelectDateWidget(empty_label="Start Date", years=range(2000, 2101)),
 			'placement_end': SelectDateWidget(empty_label="End Date (Leave if not finished)", years=range(2000, 2101))
 		}
+
+
+class UpdateFinishDateForm(ModelForm):
+	class Meta:
+		model = Experience
+		fields = ['placement_end']
+		widgets = {
+			'placement_end': SelectDateWidget(empty_label="Date Finished", years=range(2000, 2101))
+		}

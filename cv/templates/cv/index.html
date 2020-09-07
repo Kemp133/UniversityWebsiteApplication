@@ -4,6 +4,11 @@
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6">
+            {% if user.is_authenticated %}
+                <hr/>
+                <a href="{% url 'cv-manage' %}"><button class="btn btn-outline-warning">Manage CV</button></a>
+                <hr/>
+            {% endif %}
             <h1 class="text-center">My CV</h1>
             <br>
             <div id="div_BasicInfo" class="cv_div">
@@ -11,20 +16,22 @@
 
                 <hr/>
 
-                <table id="table_BasicInfo" class="form_table">
-                    {% if basic_information|length != 0 %}
-                    {% for bi in basic_information %}
-                    <tr>
-                        <th><h6>{{ bi.information_name }}</h6></th>
-                        <td>{{ bi.information_value }}</td>
-                    </tr>
-                    {% endfor %}
-                    {% else %}
-                    <tr>
-                        <td><h4>No data to display (yet)</h4></td>
-                    </tr>
-                    {% endif %}
-                </table>
+                <div class="d-flex justify-content-center">
+                    <table id="table_BasicInfo" class="form_table">
+                        {% if basic_information|length != 0 %}
+                        {% for bi in basic_information %}
+                        <tr>
+                            <th id="table_tr_BasicInfo_name"><h6>{{ bi.information_name }}</h6></th>
+                            <td>{{ bi.information_value }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td><h4>No data to display (yet)</h4></td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </div>
             </div>
 
             <hr/>
@@ -159,7 +166,7 @@
                             {% for pe in exp.experience.all %}
                             <tr>
                                 <td>{{ pe.placement_start }}</td>
-                                <td>{{ pe.placement_end }}</td>
+                                <td>{% if pe.placement_end != None %}{{ pe.placement_end }}{% else %}N/A{% endif %}</td>
                                 <td>{{ pe.notes }}</td>
                             </tr>
                             {% endfor %}
@@ -175,6 +182,7 @@
             </div>
         </div>
         <div class="col-3"></div>
+        </div>
     </div>
 {% endblock body %}
 

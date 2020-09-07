@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import (BasicInformation, PastExperience, Skill, Hobby, PastExperience, Institution, Education, Subject,
 					 Experience)
-from .forms import SubjectForm, InstituteForm, ExperienceForm
+from .forms import SubjectForm, InstituteForm, ExperienceForm, UpdateFinishDateForm
 
 
 # Create your views here.
@@ -317,3 +317,25 @@ def delete_experience(request, pk):
 
 	return render(request, 'cv/delete/delete_experience.html', {'title': 'Delete Experience',
 																'experience': experience})
+
+
+def update_experience_with_finish_date(request, pk: int):
+	# Get experience object to update
+	experience = get_object_or_404(Experience, pk=pk)
+
+	if request.method == "POST":
+		# Populate form instance with post data
+		form = UpdateFinishDateForm(request.POST)
+		# Create an experience model from the form instance
+		new_date: Experience
+		new_date = form.save(commit=False)
+		# Set placement_end of the experience object to the new date from the form
+		experience.placement_end = new_date.placement_end
+		# Save the changes
+		experience.save()
+
+		return redirect('cv-manage', permanent=True)
+
+	form = UpdateFinishDateForm()
+	return render(request, 'cv/update_experience_with_finish_date.html', {'title': 'Update Finish Date',
+																		  'form': form})

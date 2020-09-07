@@ -4,6 +4,10 @@
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
+            <hr/>
+            <a href="{% url 'cv-index' %}"><button class="btn btn-outline-primary">Back To CV</button></a>
+            <hr/>
+
             <div id="div_BasicInformation">
             <h3>Basic Information</h3>
                 <table class="form_table">
@@ -182,7 +186,13 @@
                             {% for pe in exp.experience.all %}
                             <tr>
                                 <td>{{ pe.placement_start }}</td>
-                                <td>{{ pe.placement_end }}</td>
+                                <td>
+                                    {% if pe.placement_end == None %}
+                                        <a href="{% url 'cv-update-experience-with-finish-date' pk=pe.pk %}" class="text-info">Add End Date</a>
+                                    {% else %}
+                                        {{ pe.placement_end }}
+                                    {% endif %}
+                                </td>
                                 <td>{{ pe.notes }}</td>
                                 <td>{% if pe.active %}Yes{% else %}No{% endif %}</td>
                                 <td class="text-center"><a href="{% url 'cv-delete-experience' pk=pe.pk %}" id="btn_DeleteExperience" class="text-danger">Delete</a></td>
