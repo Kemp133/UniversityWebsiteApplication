@@ -1,0 +1,14 @@
+{% extends 'cv/form_base.html' %}
+
+{% block form_title %}
+        <h1>Add Subject To Education</h1>
+        <h3>Adding data to: {{ education.institution.name }}</h3>
+{% endblock form_title %}
+
+{% block form %}
+<table>
+    {{ form.as_table }}
+</table>
+{% endblock form %}
+
+{% block submit_button %}<button type="submit" class="btn btn-outline-success">Add Subject</button>{% endblock submit_button %}

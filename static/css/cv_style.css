@@ -1,0 +1,23 @@
+table {
+    width: 100%;
+    border: solid 1px black;
+    margin: 5px 0;
+}
+
+tr {
+    border: solid 1px black;
+}
+
+th, td {
+    padding: 5px;
+}
+
+.div_education {
+    padding: 5px;
+    margin: 5px 0;
+    border: solid 1px black;
+}
+
+select {
+    width: 100%;
+}

@@ -1,0 +1,18 @@
+{% extends "cv/form_base.html" %}
+
+{% block form_title %}Add Skill{% endblock form_title %}
+
+{% block form %}
+<table>
+    <tr>
+        <th><label for="skill_name">Skill Name</label></th>
+        <td><input id="skill_name" name="skill_name" type="text" maxlength="256" required/></td>
+    </tr>
+    <tr>
+        <th><label for="skill_explanation">Skill Explanation</label></th>
+        <td><input id="skill_explanation" name="skill_explanation" type="text" maxlength="512" required/></td>
+    </tr>
+</table>
+{% endblock form %}
+
+{% block submit_button %}<button type="submit" class="btn btn-outline-success">Add Skill</button>{% endblock submit_button %}

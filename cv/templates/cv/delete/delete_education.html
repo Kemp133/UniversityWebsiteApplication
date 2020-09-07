@@ -1,0 +1,46 @@
+{% extends 'cv/form_base.html' %}
+
+{% block form_head %}
+        <h1>Are you sure you want to delete this Education?</h1>
+        <br>
+        <h5>Education to delete: {{ education.institution.name }}</h5>
+{% endblock form_head %}
+
+{% block form %}
+<table>
+    <tr>
+        <th>Institute Address</th>
+        <td>
+            {{ education.institution.address_line_1 }}<br>
+            {{ education.institution.address_line_2 }}<br>
+            {{ education.institution.address_line_3 }}<br>
+            {{ education.institution.address_line_4 }}<br>
+            {{ education.institution.post_code }}
+        </td>
+    </tr>
+</table>
+<hr/>
+<h4>Subjects tied to this institute</h4>
+<table>
+    <tr>
+        <th>Subject Name</th>
+        <th>Predicted Grade</th>
+        <th>Actual Grade</th>
+    </tr>
+    {% if education.subject.all|length != 0 %}
+        {% for sub in education.subject.all %}
+        <tr>
+            <td>{{ sub.name }}</td>
+            <td>{{ sub.predicted_grade }}</td>
+            <td>{{ sub.actual_grade }}</td>
+        </tr>
+        {% endfor %}
+    {% else %}
+    <tr>
+        <td colspan="3">No Subjects Currently</td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock form %}
+
+{% block submit_button %}<button type="submit" class="btn btn-outline-danger">Delete Education</button>{% endblock submit_button %}

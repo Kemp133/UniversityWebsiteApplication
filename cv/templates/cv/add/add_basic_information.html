@@ -1,0 +1,18 @@
+{% extends "cv/form_base.html" %}
+
+{% block form_title %}Add Basic Information{% endblock form_title %}
+
+{% block form %}
+<table>
+    <tr>
+        <th><label for="info_name">Information Name</label></th>
+        <td><input id="info_name" name="name" type="text" maxlength="256" required/></td>
+    </tr>
+    <tr>
+        <th><label for="info_value">Information Value</label></th>
+        <td><input id="info_value" name="value" type="text" maxlength="256" required/></td>
+    </tr>
+</table>
+{% endblock form %}
+
+{% block submit_button %}<button type="submit" class="btn btn-success">Add Basic Information</button>{% endblock submit_button %}

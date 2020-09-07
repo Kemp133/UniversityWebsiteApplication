@@ -1,0 +1,18 @@
+{% extends "cv/form_base.html" %}
+
+{% block form_title %}Add Hobby{% endblock form_title %}
+
+{% block body %}
+<table>
+    <tr>
+        <th><label for="hobby_name">Hobby Name</label></th>
+        <td><input id="hobby_name" name="hobby_name" type="text" maxlength="128" required/></td>
+    </tr>
+    <tr>
+        <th><label for="hobby_description">Hobby Explanation</label></th>
+        <td><input id="hobby_description" name="hobby_description" type="text" maxlength="512" required/></td>
+    </tr>
+</table>
+{% endblock body %}
+
+{% block submit_button %}<button type="submit" class="btn btn-outline-success">Add Hobby</button>{% endblock submit_button %}

@@ -1,0 +1,22 @@
+{% extends 'cv/form_base.html' %}
+
+{% block form_head %}
+<h1>Are you sure you want to delete this Basic Information?</h1>
+<br/>
+<h5>Basic Information to delete: {{ basic_information.information_name }}</h5>
+{% endblock %}
+
+{% block form %}
+<table>
+        <tr>
+            <th>Information Value</th>
+            <td>{{ basic_information.information_value }}</td>
+        </tr>
+        <tr>
+            <th>Active</th>
+            <td>{% if basic_information.active %}Yes{% else %}No{% endif %}</td>
+        </tr>
+</table>
+{% endblock form %}
+
+{% block submit_button %}<button type="submit" class="btn btn-outline-danger">Delete Basic Information</button>{% endblock %}

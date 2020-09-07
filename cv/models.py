@@ -23,18 +23,44 @@ class Subject(models.Model):
 class Institution(models.Model):
 	name = models.CharField(max_length=256)
 	address_line_1 = models.CharField(max_length=256)
-	address_line_2 = models.CharField(max_length=256, blank=True)
-	address_line_3 = models.CharField(max_length=256)
+	address_line_2 = models.CharField(max_length=256)
+	address_line_3 = models.CharField(max_length=256, blank=True)
 	address_line_4 = models.CharField(max_length=256)
 	post_code = models.CharField(max_length=8)
 
 
 class Education(models.Model):
 	institution = models.ForeignKey(Institution, models.CASCADE)
-	subject = models.ForeignKey(Subject, models.CASCADE)
+	subject = models.ManyToManyField(Subject, related_name="education_institute")
 
 
 class BasicInformation(models.Model):
 	information_name = models.CharField(max_length=256, blank=False)
 	information_value = models.CharField(max_length=256, blank=False)
 	active = models.BooleanField(default=True)
+
+
+class Skill(models.Model):
+	skill_name = models.CharField(max_length=128, blank=False)
+	skill_explanation = models.CharField(max_length=512, blank=False)
+	active = models.BooleanField(default=True)
+
+
+class Hobby(models.Model):
+	hobby_name = models.CharField(max_length=128, blank=False)
+	hobby_description = models.CharField(max_length=512, blank=False)
+	active = models.BooleanField(default=True)
+
+
+class Placement(models.Model):
+	placement_start = models.DateField()
+	placement_end = models.DateField(blank=True)
+	notes = models.TextField()
+	active = models.BooleanField(default=True)
+
+
+class PastExperience(models.Model):
+	institution = models.ForeignKey(Institution, models.CASCADE)
+	placement = models.ManyToManyField(Placement, related_name='past_experience')
+
+

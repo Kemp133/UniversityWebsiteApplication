@@ -1,0 +1,22 @@
+{% extends 'cv/form_base.html' %}
+
+{% block form_title %}
+    <h1>Are you sure you want to delete this Subject?</h1>
+    <br/>
+    <h5>Subject to delete: {{ subject.name }}</h5>
+{% endblock form_title %}
+
+{% block form %}
+<table>
+    <tr>
+        <th>Predicted Grade</th>
+        <td>{{ subject.predicted_grade }}</td>
+    </tr>
+    <tr>
+        <th>Actual Grade</th>
+        <td>{{ subject.actual_grade }}</td>
+    </tr>
+</table>
+{% endblock form %}
+
+{% block submit_button %}<button type="submit" class="btn btn-outline-danger">Delete Subject</button>{% endblock submit_button %}
